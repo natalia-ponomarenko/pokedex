@@ -1,47 +1,39 @@
-import React, {
-  useEffect,
-  useState,
-} from "react";
-import {
-  getAllPokemons,
-  getPokemonDetails,
-  getPokemonTypes,
-} from "./api/pokemon";
+import React from "react";
+import { getAllPokemons, getPokemonDetails } from "./api/pokemon";
 import { PokemonApiResponse } from "./types/PokemonApiResponse";
-import { Pokemon } from "./types/Pokemon";
+import { TypesList } from "./components/TypesList";
+import { useQuery } from "@tanstack/react-query";
+import { Loader } from "./components/Loader";
 
 const App: React.FC = () => {
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  const { data, status } = useQuery<PokemonApiResponse>({
+    queryKey: ["pokemonList"],
+    queryFn: getAllPokemons,
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data: PokemonApiResponse =
-          await getAllPokemons();
-        const pokemonList =
-          await getPokemonDetails(data);
-        setPokemons(pokemonList? pokemonList : []);
-        const types = await getPokemonTypes();
-        console.log(types)
-      } catch (error) {
-        throw new Error('Something went wrong and Pokemos were loaded')
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { data: pokemonList, status: pokemonListStatus } = useQuery({
+    queryKey: ["pokemonDetails"],
+    queryFn: () => getPokemonDetails(data),
+    enabled: status === "success",
+  });
 
   return (
     <>
       <h1 className="text-red-500 text-3xl font-bold underline">
         This is Pokedex!
       </h1>
-      <div>
-        {pokemons.length && (
-          pokemons.map(({name}) => <p>{name}</p>)
-        )}
-
-      </div>
+      {status === "loading" && pokemonListStatus === "loading" && <Loader />}
+      {status === "success" && pokemonListStatus === "success" && (
+        <div>
+          {pokemonList?.map(({ name }) => (
+            <p>{name}</p>
+          ))}
+        </div>
+      )}
+      {(status === "error" || pokemonListStatus === "error") && (
+        <p>Pokemons weren't fetched</p>
+      )}
+      <TypesList />
     </>
   );
 };
