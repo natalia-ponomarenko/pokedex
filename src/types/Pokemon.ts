@@ -4,6 +4,7 @@ export interface Pokemon {
   height: number;
   weight: number;
   types: PokemonTypeIndividual[];
+  moves: PokemonMove[];
 }
 
 interface PokemonTypeIndividual {
@@ -12,4 +13,9 @@ interface PokemonTypeIndividual {
     name: string;
     url: string;
   };
+}
+
+interface PokemonMove {
+  name: string;
+  url: string;
 }

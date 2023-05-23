@@ -1,4 +1,4 @@
-import { TYPE_URL, URL10, URL_ALL } from "../helpers/constants";
+import { TYPE_URL } from "../helpers/constants";
 import { PokemonApiResponse } from "../types/PokemonApiResponse";
 import { PokemonTypeApiResponse } from "../types/PokemonTypeApiResponse";
 
@@ -11,8 +11,8 @@ export const request = <T>(url: string): Promise<T> =>
     return response.json() as Promise<T>;
   });
 
-export const getAllPokemons = (): Promise<PokemonApiResponse> =>
-  request(URL_ALL);
+export const getAllPokemons = (url: string): Promise<PokemonApiResponse> =>
+  request(url);
 
 export const getPokemonTypes = (): Promise<PokemonTypeApiResponse> =>
   request(TYPE_URL);
@@ -23,7 +23,8 @@ export const getPokemonDetails = async (
   if (data) {
     const pokemonList = await Promise.all(
       data.results.map(async (pokemon) => {
-        return await fetch(pokemon.url).then((response) => response.json());
+        const response = await fetch(pokemon.url);
+        return await response.json();
       })
     );
 
