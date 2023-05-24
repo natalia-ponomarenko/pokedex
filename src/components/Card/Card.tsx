@@ -1,58 +1,52 @@
-import { pokemonTypes } from '../../helpers/constants';
-import { Pokemon } from '../../types/Pokemon';
+import { pokemonTypes } from "../../helpers/constants";
+import { Pokemon } from "../../types/Pokemon";
+import { PokemonType } from "../../types/PokemonTypes";
 
-export const Card = ({
-  id,
-  height,
-  weight,
-  name,
-  types,
-  moves,
-}: Pokemon) => {
-  const addDefaultSrc = (event) => {
-    event.target.src = '../images/Poke_ball.png'
-  }
+export const Card = ({ id, height, weight, name, types, moves }: Pokemon) => {
+  const addDefaultSrc = (
+    event: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    event.currentTarget.src = "../images/Poke_ball.png";
+  };
 
   return (
-    <div className="card">
-      <div
-      >
-        <div>
+    <div className="flex flex-col w-52 m-4 bg-white p-6 rounded text-sm">
+      <div>
+        <div className="flex justify-between">
           <div>
-            <span>
               <div>Height:</div>
               <div>{`${height / 10} m`}</div>
-            </span>
           </div>
           <div>
-            <span>
               <div>Weight:</div>
               <div>{`${weight / 100} kg`}</div>
-            </span>
           </div>
         </div>
-        <div>{`${name}`}</div>
-        <div>
+        <div className="text-lg text-center text-slate-800 font-medium capitalize py-1
+        ">{`${name}`}</div>
+        <div className="">
           <img
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
             onError={addDefaultSrc}
             alt={name}
+            className="w-48 h-48 object-cover"
           />
         </div>
-        <div className="card__types">
+        <div className="flex">
           {types.map((type) => (
             <div
               key={type.slot}
-              style={{ backgroundColor: pokemonTypes[type.type.name] }}
+              className="flex w-min px-4 py-1 rounded m-1 font-medium"
+              style={{
+                backgroundColor: pokemonTypes[type.type.name as PokemonType],
+              }}
             >
               {type.type.name}
             </div>
           ))}
         </div>
-        <div>
-          {`Total moves: ${moves.length}`}
-        </div>
+        <div>{`Total moves: ${moves.length}`}</div>
       </div>
     </div>
-  )
-}
+  );
+};

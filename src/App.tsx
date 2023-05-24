@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllPokemons, getPokemonDetails } from "./api/pokemon";
 import { Loader } from "./components/Loader";
 import { URL10 } from "./helpers/constants";
 import { TypesList } from "./components/TypesList";
-import Select, { SingleValue } from "react-select";
-import { options } from "./helpers/constants";
 import { SelectOption } from "./types/SelectOption";
 import { Card } from "./components/Card";
+import { PokemonPerPageSelect as Select } from "./components/Select";
+import { Search } from "./components/Search";
+import { SingleValue } from "react-select";
+import { filterByType } from "./helpers/helperFunctions";
+import { Button } from "./components/Button";
 
 const App: React.FC = () => {
   const [pageUrl, setPageUrl] = useState(URL10);
-  const [filter, setFilter] = useState("");
-  const [filterArray, setFilterArray] = useState([]);
+  const [query, setQuery] = useState("");
+  const [filterArray, setFilterArray] = useState<string[]>([]);
 
   const { isLoading, isError, data } = useQuery(["pokemons", pageUrl], () =>
     getAllPokemons(pageUrl)
@@ -31,102 +34,102 @@ const App: React.FC = () => {
     }
   };
 
-  const handlePreviousPage = () => {
+  const handlePreviousPage = useCallback(() => {
     if (data?.previous) {
       setPageUrl(data.previous);
     }
-  };
+  }, [data]);
 
-  const handleNextPage = () => {
+  const handleNextPage = useCallback(() => {
     if (data?.next) {
       setPageUrl(data.next);
     }
-  };
+  }, [data]);
 
   useEffect(() => {
-    if (!filter) {
+    if (!query) {
       setFilteredData(pokemonList);
       return;
     }
-    const query = filter.toLowerCase();
-    const filteredData = filter
+
+    const lowerCasedQuery = query.toLowerCase();
+    const filteredData = query
       ? pokemonList?.filter((pokemon) =>
-          pokemon.name.toLowerCase().startsWith(query)
+          pokemon.name.toLowerCase().startsWith(lowerCasedQuery)
         )
       : pokemonList;
-    setFilteredData(filteredData);
-  }, [filter, pokemonList]);
 
-  const filterByType = (name: string) => {
-    const filterButton = document.getElementById(name);
-    console.log(name);
-    filterButton.classList.toggle("pressed");
-    if (filterArray.includes(name)) {
-      const index = filterArray.indexOf(name);
-      if (index > -1) {
-        filterArray.splice(index, 1);
+    setFilteredData(filteredData);
+  }, [query, pokemonList]);
+
+  const handleSearchValueChange = useCallback(
+    (value: string) => {
+      if (value) {
+        filterByType(
+          value,
+          filterArray,
+          setFilterArray,
+          pokemonList,
+          setFilteredData
+        );
       }
-    } else {
-      filterArray.push(name);
-    }
-
-    setFilterArray(filterArray);
-
-    if (!filterArray.length) {
-      setFilteredData(pokemonList);
-      return;
-    }
-
-    const filteredData = pokemonList.filter((pokemon) =>
-      pokemon.types.some((el) =>
-        filterArray.includes(el.type.name.toLowerCase())
-      )
-    );
-    setFilteredData(filteredData);
-  };
+    },
+    [filterArray, pokemonList]
+  );
 
   return (
     <>
       <h1 className="text-red-500 text-3xl font-bold underline">
         This is Pokedex!
       </h1>
-      <TypesList filter={filterByType} />
 
-      <Select
-        options={options}
-        onChange={handleSelectChange}
-        autoFocus={true}
-        defaultValue={{ label: "10", value: URL10 }}
-      />
+      <div className="text-slate-800">
+        <TypesList filter={handleSearchValueChange} />
 
-      <input
-        type="text"
-        id="search-query"
-        className="input is-success"
-        placeholder="Start filter the pokemons!"
-        value={filter}
-        style={{ border: "1px dashed red" }}
-        onChange={({ currentTarget: { value } }) => setFilter(value)}
-      />
+        <div className="flex justify-center">
+          <Select handleChange={handleSelectChange} />
+          <Search filterValue={query} handleFilter={setQuery} />
+        </div>
 
-      {areDetailsLoading ? (
-        <Loader />
-      ) : filteredData?.length ? (
-        filteredData?.map((pokemon) => <Card {...pokemon} />)
-      ) : (
-        <p>There aren't pokemons here!</p>
-      )}
-      {!isLoading && (
-        <>
-          <button onClick={handlePreviousPage} disabled={!data?.previous}>
-            Previous Page
-          </button>
-          <button onClick={handleNextPage} disabled={!data?.next}>
-            Next Page
-          </button>
-        </>
-      )}
-      {isError && <p>Error!</p>}
+        <div className="flex flex-wrap mx-9 my-4">
+          {(areDetailsLoading || isLoading) && <Loader />}
+          {filteredData?.length &&
+            !areDetailsLoading &&
+            filteredData.map((pokemon) => (
+              <Card key={pokemon.name} {...pokemon} />
+            ))}
+            {
+              !areDetailsLoading && filteredData?.length == 0 && (
+                <p>There aren't pokemons here!</p>
+              )
+            }
+          {/* {(areDetailsLoading || isLoading) ? (
+            <Loader />
+          ) : filteredData?.length && !areDetailsLoading ? (
+            filteredData.map((pokemon) => (
+              <Card key={pokemon.name} {...pokemon} />
+            ))
+          ) : (
+            <p>There aren't pokemons here!</p>
+          )} */}
+        </div>
+
+        {!isLoading && (
+          <>
+            <Button
+              handleAction={handlePreviousPage}
+              disabled={!data?.previous}
+            >
+              Previous
+            </Button>
+            <Button handleAction={handleNextPage} disabled={!data?.next}>
+              Next
+            </Button>
+          </>
+        )}
+
+        {isError && <p>Error!</p>}
+      </div>
     </>
   );
 };

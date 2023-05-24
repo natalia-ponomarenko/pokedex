@@ -7,7 +7,7 @@ export interface Pokemon {
   moves: PokemonMove[];
 }
 
-interface PokemonTypeIndividual {
+export interface PokemonTypeIndividual {
   slot: number;
   type: {
     name: string;
