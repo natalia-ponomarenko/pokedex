@@ -37,6 +37,6 @@ export const pokemonTypes: PokemonTypes = {
   dark: "#705746",
   steel: "#B7B7CE",
   fairy: "#D685AD",
-  unknown: "#F3FF89",
+  unknown: "#A3A3A3",
   shadow: "#9467B5",
 };

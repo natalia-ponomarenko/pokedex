@@ -29,7 +29,7 @@ export const Card = ({ id, height, weight, name, types, moves }: Pokemon) => {
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
             onError={addDefaultSrc}
             alt={name}
-            className="w-48 h-48 object-cover"
+            className="w-40 h-40 object-cover"
           />
         </div>
         <div className="flex">

@@ -4,6 +4,7 @@
   border-radius: 50%;
   background: white;
   position: relative;
+  margin: 20px auto;
   box-shadow: -10px 0 rgba(0, 0, 0, 0.1) inset;
   animation: roll 1s ease-in-out infinite;
   background: linear-gradient(

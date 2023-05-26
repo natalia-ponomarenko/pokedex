@@ -21,7 +21,6 @@ export const PokemonPerPageSelect: React.FC<Props> = ({ handleChange }) => {
             primary: "red",
           },
         })}
-        autoFocus={true}
         defaultValue={{ label: "10", value: URL10 }}
       />
     </div>
