@@ -74,15 +74,15 @@ const App: React.FC = () => {
     <>
       <Header />
 
-      <div className="text-slate-800">
+      <div className="text-slate-800 ml-screen-offset">
         <TypesList filter={handleFilterChange} />
 
-        <div className="flex justify-center ml-screen-offset">
+        <div className="flex justify-center px-2">
           <Select handleChange={handleSelectChange} />
           <Search filterValue={query} handleFilter={setQuery} />
         </div>
 
-        <div className="flex flex-col mx-9 my-4 items-center justify-center ml-screen-offset">
+        <div className="flex flex-col mx-9 my-4 justify-center items-center">
           {isLodingInProgress ? (
             <Loader />
           ) : (

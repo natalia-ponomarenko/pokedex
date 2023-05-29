@@ -15,11 +15,11 @@ export const TypesList: React.FC<Props> = ({ filter }) => {
   });
 
   return (
-    <div className="flex my-8 px-5 ml-screen-offset">
+    <div className="flex my-8 mx-auto px-5 max-w-4xl">
       {isLoading && <p>Loading types...</p>}
       {isError && <Error text="Ooops! Types weren't fetched" />}
       {data && (
-        <div className="flex flex-wrap justify-center">
+        <div className="flex flex-wrap justify-center items-center">
           {data.results.map((type) => (
             <button
               key={type.name}
