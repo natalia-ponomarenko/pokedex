@@ -9,7 +9,7 @@ export const PokemonList: React.FC<Props> = ({ list }) => {
   return (
     <div className="flex flex-wrap justify-center">
       {list?.map((pokemon: Pokemon) => (
-        <Card key={pokemon.name} {...pokemon} />
+        <Card key={pokemon.name} pokemon={pokemon} />
       ))}
     </div>
   );

@@ -44,3 +44,9 @@ export const filterByQuery = (
 
   return filteredData;
 };
+
+export const addDefaultSrc = (
+  event: React.SyntheticEvent<HTMLImageElement, Event>
+) => {
+  event.currentTarget.src = "../images/Poke_ball.png";
+};

@@ -1,3 +1,5 @@
+import { Statistic } from "./PokemonStats";
+
 export interface Pokemon {
   id: number;
   name: string;
@@ -5,6 +7,7 @@ export interface Pokemon {
   weight: number;
   types: PokemonTypeIndividual[];
   moves: PokemonMove[];
+  stats: Statistic[];
 }
 
 export interface PokemonTypeIndividual {
