@@ -3,15 +3,19 @@ import { URL10, options } from "../../helpers/constants";
 import { SelectOption } from "../../types/SelectOption";
 
 type Props = {
-  handleChange: (option: SingleValue<SelectOption>) => void;
-}
+  handleChange: (update?: string, option?: SingleValue<SelectOption>) => void;
+};
 
 export const PokemonPerPageSelect: React.FC<Props> = ({ handleChange }) => {
+  const handleSelectChange = (selectedOption: SingleValue<SelectOption>) => {
+    handleChange(undefined, selectedOption);
+  };
+
   return (
     <div className="w-56">
       <Select
         options={options}
-        onChange={handleChange}
+        onChange={handleSelectChange}
         theme={(theme: Theme) => ({
           ...theme,
           borderRadius: 5,

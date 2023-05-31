@@ -50,3 +50,17 @@ export const addDefaultSrc = (
 ) => {
   event.currentTarget.src = "../images/Poke_ball.png";
 };
+
+export const resetFilters = () => {
+  const filterActiveButtons = [
+    ...document.querySelectorAll(".outline-yellow-500"),
+  ];
+
+  filterActiveButtons.forEach((button) => {
+    const clickEvent = new Event("click");
+
+    button.dispatchEvent(clickEvent);
+    button.classList.remove("outline", "outline-yellow-500");
+    return button;
+  });
+};

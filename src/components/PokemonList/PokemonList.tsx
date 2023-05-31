@@ -7,7 +7,7 @@ type Props = {
 
 export const PokemonList: React.FC<Props> = ({ list }) => {
   return (
-    <div className="flex flex-wrap justify-center">
+    <div className="flex flex-wrap justify-center py-2">
       {list?.map((pokemon: Pokemon) => (
         <Card key={pokemon.name} pokemon={pokemon} />
       ))}

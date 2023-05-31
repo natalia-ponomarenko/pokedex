@@ -1,14 +1,22 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { SingleValue } from "react-select";
+import React, {
+  useCallback,
+  useEffect,
+  useState
+} from "react";
+import {
+  filterByQuery,
+  filterByType,
+  resetFilters,
+} from "./helpers/helperFunctions";
 import { getAllPokemons, getPokemonDetails } from "./api/pokemon";
 import { URL10 } from "./helpers/constants";
+import { useQuery } from "@tanstack/react-query";
+import { SingleValue } from "react-select";
 import { SelectOption } from "./types/SelectOption";
 import { TypesList } from "./components/TypesList";
 import { Loader } from "./components/Loader";
 import { PokemonPerPageSelect as Select } from "./components/Select";
 import { Search } from "./components/Search";
-import { filterByQuery, filterByType } from "./helpers/helperFunctions";
 import { Button } from "./components/Button";
 import { Header } from "./components/Header";
 import { PokemonList } from "./components/PokemonList";
@@ -33,6 +41,8 @@ const App: React.FC = () => {
   useEffect(() => {
     const preparedListOfPokemons = filterByQuery(query, pokemonList);
     setFilteredData(preparedListOfPokemons);
+    setFilterArray([]);
+    resetFilters();
   }, [query, pokemonList]);
 
   const handleFilterChange = useCallback(
@@ -48,23 +58,21 @@ const App: React.FC = () => {
     [filterArray, pokemonList]
   );
 
-  const handleSelectChange = useCallback((option: SingleValue<SelectOption>) => {
-    if (option) {
-      setPageUrl(option.value);
-    }
-  }, [setPageUrl]);
+  const handlePageChange = useCallback(
+    (update?: string | null, option?: SingleValue<SelectOption>) => {
+      if (update) {
+        setPageUrl(update);
+      }
 
-  const handlePreviousPage = useCallback(() => {
-    if (data?.previous) {
-      setPageUrl(data.previous);
-    }
-  }, [data]);
+      if (option) {
+        setPageUrl(option.value);
+      }
 
-  const handleNextPage = useCallback(() => {
-    if (data?.next) {
-      setPageUrl(data.next);
-    }
-  }, [data]);
+      setFilterArray([]);
+      resetFilters();
+    },
+    [setPageUrl, setFilterArray]
+  );
 
   const isLodingInProgress = isLoading || areDetailsLoading;
   const noPokemonsFound =
@@ -78,7 +86,7 @@ const App: React.FC = () => {
         <TypesList filter={handleFilterChange} />
 
         <div className="flex justify-center px-2">
-          <Select handleChange={handleSelectChange} />
+          <Select handleChange={handlePageChange} />
           <Search filterValue={query} handleFilter={setQuery} />
         </div>
 
@@ -89,12 +97,15 @@ const App: React.FC = () => {
             <>
               <div className="flex justify-center">
                 <Button
-                  handleAction={handlePreviousPage}
+                  handleAction={() => handlePageChange(data?.previous)}
                   disabled={!data?.previous}
                 >
                   Previous
                 </Button>
-                <Button handleAction={handleNextPage} disabled={!data?.next}>
+                <Button
+                  handleAction={() => handlePageChange(data?.next)}
+                  disabled={!data?.next}
+                >
                   Next
                 </Button>
               </div>
@@ -102,7 +113,9 @@ const App: React.FC = () => {
             </>
           )}
 
-          {isError && <Error text="Ooops! Something went wrong..." />}
+          {isError && (
+            <Error text="Ooops! Something went wrong..." />
+          )}
           {noPokemonsFound && !isLodingInProgress && (
             <Error text="No pokemons found!" />
           )}
