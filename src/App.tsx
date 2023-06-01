@@ -1,8 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   filterByQuery,
   filterByType,
@@ -21,6 +17,7 @@ import { Button } from "./components/Button";
 import { Header } from "./components/Header";
 import { PokemonList } from "./components/PokemonList";
 import { Error } from "./components/Error";
+import { Pokemon } from "./types/Pokemon";
 
 const App: React.FC = () => {
   const [pageUrl, setPageUrl] = useState(URL10);
@@ -37,6 +34,7 @@ const App: React.FC = () => {
   });
 
   const [filteredData, setFilteredData] = useState(pokemonList);
+  const [collection, setCollection] = useState<Pokemon[] | []>([]);
 
   useEffect(() => {
     const preparedListOfPokemons = filterByQuery(query, pokemonList);
@@ -74,10 +72,34 @@ const App: React.FC = () => {
     [setPageUrl, setFilterArray]
   );
 
+  const isPokemonInCollection = useMemo(() => {
+      return (pokemon: Pokemon) => collection.some((pokemonCard) => pokemonCard.id === pokemon.id);
+    },
+    [collection]
+  );
+
+  const addPokemon = useCallback(
+    (pokemon: Pokemon) => {
+      if (!isPokemonInCollection(pokemon)) {
+        setCollection([...collection, pokemon]);
+      }
+    },
+    [collection, isPokemonInCollection]
+  );
+
+  const removePokemon = useCallback(
+    (name: string) => {
+      const updatedCollection = collection.filter(
+        (pokemon) => pokemon.name !== name
+      );
+      setCollection(updatedCollection);
+    },
+    [collection]
+  );
+
   const isLodingInProgress = isLoading || areDetailsLoading;
   const noPokemonsFound =
     filterArray.length !== 0 && filteredData?.length === 0;
-
   return (
     <>
       <Header />
@@ -95,6 +117,18 @@ const App: React.FC = () => {
             <Loader />
           ) : (
             <>
+              {collection.length !== 0 && (
+                <div>
+                  {collection.map((pok) => (
+                    <>
+                      <p>{pok.name}</p>
+                      <button onClick={() => removePokemon(pok.name)}>
+                        Remove
+                      </button>
+                    </>
+                  ))}
+                </div>
+              )}
               <div className="flex justify-center">
                 <Button
                   handleAction={() => handlePageChange(data?.previous)}
@@ -109,13 +143,16 @@ const App: React.FC = () => {
                   Next
                 </Button>
               </div>
-              <PokemonList list={filteredData} />
+              <PokemonList
+                list={filteredData}
+                addPokemon={addPokemon}
+                removePokemon={removePokemon}
+                isInCollection={isPokemonInCollection}
+              />
             </>
           )}
 
-          {isError && (
-            <Error text="Ooops! Something went wrong..." />
-          )}
+          {isError && <Error text="Ooops! Something went wrong..." />}
           {noPokemonsFound && !isLodingInProgress && (
             <Error text="No pokemons found!" />
           )}
