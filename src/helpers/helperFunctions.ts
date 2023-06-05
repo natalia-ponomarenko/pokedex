@@ -48,7 +48,7 @@ export const filterByQuery = (
 export const addDefaultSrc = (
   event: React.SyntheticEvent<HTMLImageElement, Event>
 ) => {
-  event.currentTarget.src = "../images/Poke_ball.png";
+  event.currentTarget.src = "images/Poke_ball.png";
 };
 
 export const resetFilters = () => {

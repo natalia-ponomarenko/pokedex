@@ -1,42 +1,64 @@
-import { useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { pokemonTypes } from "../../helpers/constants";
 import { PokemonType } from "../../types/PokemonTypes";
 import { Pokemon } from "../../types/Pokemon";
 import { Modal } from "../Modal/Modal";
 import { addDefaultSrc } from "../../helpers/helperFunctions";
+import { CollectionContext } from "../CollectionProvider";
 
 type Props = {
   pokemon: Pokemon;
-  addPokemon: (pokemon: Pokemon) => void;
-  isInCollection: (pokemon: Pokemon) => boolean;
-  removePokemon: (name: string) => void;
 };
 
-export const Card: React.FC<Props> = ({
-  pokemon,
-  addPokemon,
-  isInCollection,
-  removePokemon,
-}) => {
+export const Card: React.FC<Props> = ({ pokemon }) => {
   const [open, setOpen] = useState(false);
 
-  const { id, name, weight, height, types, moves } = pokemon;
+  const context = useContext(CollectionContext);
+  const { collection, setCollection } = context;
 
-  const collected = isInCollection(pokemon);
-  console.log('card render')
+  const collected = useMemo(() => {
+    return (pokemon: Pokemon) =>
+      collection.some((pokemonCard: Pokemon) => pokemonCard.id === pokemon.id);
+  }, [collection]);
+
+  const addPokemon = useCallback(
+    (pokemon: Pokemon) => {
+      if (!collected(pokemon)) {
+        setCollection((prevCollection: Pokemon[]) => [
+          ...prevCollection,
+          pokemon,
+        ]);
+      }
+    },
+    [setCollection, collected]
+  );
+
+  const removePokemon = useCallback(
+    (name: string) => {
+      setCollection((prevCollection: Pokemon[]) =>
+        prevCollection.filter((pokemon: Pokemon) => pokemon.name !== name)
+      );
+    },
+    [setCollection]
+  );
+
+  const { id, name, weight, height, types, moves } = pokemon;
   return (
     <div className="flex flex-col m-4">
-      <div className="bg-white rounded w-16 p-1 text-center">
-          <button onClick={() =>
-            collected ? removePokemon(pokemon.name) : addPokemon(pokemon)
-          }>
-            <img
-              className="h-8"
-              src={`/images/${collected ? 'pikachu' : 'pokeball_small'}.png`}
-              alt="pokeball"
-            />
-          </button>
-      </div>
+      <button
+        className="bg-white rounded w-16 pt-2 flex justify-center items-center"
+        onClick={() =>
+          collected(pokemon) ? removePokemon(pokemon.name) : addPokemon(pokemon)
+        }
+      >
+        <img
+          className="h-8"
+          src={`images/${
+            collected(pokemon) ? "pikachu" : "pokeball_small"
+          }.png`}
+          alt="pokeball"
+        />
+      </button>
       <div
         className={`flex flex-col w-52 bg-white p-6 rounded text-sm`}
         onClick={() => setOpen(true)}
@@ -52,7 +74,9 @@ export const Card: React.FC<Props> = ({
               <div>{`${weight / 100} kg`}</div>
             </div>
           </div>
-          <div className="text-lg text-center text-slate-800 font-medium capitalize py-1">{`${name}`}</div>
+          <div className="text-lg text-center text-slate-800 font-medium capitalize py-1">
+            {name}
+          </div>
           <div>
             <img
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
