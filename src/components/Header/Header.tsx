@@ -14,7 +14,7 @@ export const Header = () => {
           className="font-medium text-lg text-white flex flex-col md:flex-row items-center "
         >
           Your Collection
-          <img src="/images/pikachu.png" alt="pikachu" className="h-8 px-2" />
+          <img src="images/pikachu.png" alt="pikachu" className="h-8 px-2" />
         </Link>
       </div>
     </header>

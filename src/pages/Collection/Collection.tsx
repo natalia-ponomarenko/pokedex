@@ -1,33 +1,22 @@
-import { useCallback, useContext } from "react";
-import { Pokemon } from "../../types/Pokemon";
+import { useContext } from "react";
 import { CollectionContext } from "../../components/CollectionProvider";
+import { PokemonList } from "../../components/PokemonList";
+import { Link } from "react-router-dom";
 
 export const Collection: React.FC = () => {
   const context = useContext(CollectionContext);
-  const { collection, setCollection } = context;
+  const { collection } = context;
 
-  const removePokemon = useCallback(
-    (name: string) => {
-      setCollection((prevCollection: Pokemon[]) =>
-        prevCollection.filter((pokemon: Pokemon) => pokemon.name !== name)
-      );
-    },
-    [setCollection]
-  );
-
-  return collection.length !== 0 ? (
-    <div>
-      {collection.map((pokemon: Pokemon) => {
-        const { name } = pokemon;
-        return (
-          <div key={name}>
-            <p>{name}</p>
-            <button onClick={() => removePokemon(name)}>Remove</button>
-          </div>
-        );
-      })}
+  return (
+    <div className="text-center">
+      <Link to="/">
+        <button type="button" className="bg-red-600 p-2 rounded text-white m-1">Back to list</button>
+      </Link>
+      {collection.length !== 0 ? (
+        <PokemonList list={collection} />
+      ) : (
+        <p className="py-4">You haven't added any pokemons yet</p>
+      )}
     </div>
-  ) : (
-    <p>You haven't added any pokemons yet</p>
   );
 };
