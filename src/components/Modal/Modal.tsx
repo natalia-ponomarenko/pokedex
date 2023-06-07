@@ -3,6 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { addDefaultSrc } from "../../helpers/helperFunctions";
 import { Statistic } from "../../types/PokemonStats";
 import { Pokemon } from "../../types/Pokemon";
+import { PokemonStatsChart } from "../Stats";
 
 type Props = {
   isModalOpen: boolean;
@@ -42,7 +43,7 @@ export const Modal: React.FC<Props> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-64 transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all ml-screen-offset">
+              <Dialog.Panel className="w-[360px] box-border transform overflow-hidden rounded-2xl bg-white p-2 text-center align-middle shadow-xl transition-all ml-screen-offset">
                 <Dialog.Title
                   as="h3"
                   className="text-lg font-medium leading-6 text-slate-800 capitalize"
@@ -56,20 +57,7 @@ export const Modal: React.FC<Props> = ({
                     alt={name}
                     className="w-40 h-40 object-cover"
                   />
-                  {stats.map((stat: Statistic) => {
-                    const { base_stat } = stat;
-                    const { name } = stat.stat;
-                    return (
-                      <div key={name} className="w-full">
-                        <div className="flex justify-between">
-                          <div className="capitalize font-bold text-slate-600">
-                            {name}
-                          </div>
-                          <div>{base_stat}</div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  <PokemonStatsChart stats={stats} />
                 </div>
 
                 <div className="mt-4">

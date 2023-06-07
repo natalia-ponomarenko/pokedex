@@ -12,6 +12,7 @@ import { Button } from "../../components/Button";
 import { PokemonList } from "../../components/PokemonList";
 import { Error } from "../../components/Error";
 import { PokemonPerPageSelect as Select } from "../../components/Select";
+import { Pokemon } from "../../types/Pokemon";
 
 export const Home: React.FC = () => {
   const [pageUrl, setPageUrl] = useState(URL10);
@@ -27,7 +28,7 @@ export const Home: React.FC = () => {
     queryFn: () => getPokemonDetails(data),
   });
 
-  const [filteredData, setFilteredData] = useState(pokemonList);
+  const [filteredData, setFilteredData] = useState<Pokemon[] | []>(pokemonList);
 
   useEffect(() => {
     const preparedListOfPokemons = filterByQuery(query, pokemonList);

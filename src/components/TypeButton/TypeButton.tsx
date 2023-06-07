@@ -3,16 +3,18 @@ import { PokemonType } from "../../types/PokemonTypes";
 
 type Props = {
   name: string;
-  filter: (name: string) => void;
+  filter?: (name: string) => void;
 };
 
-export const TypeButton: React.FC<Props> = ({ name, filter }) => {
+export const TypeButton: React.FC<Props> = ({ name, filter}) => {
   return (
     <button
       key={name}
       id={name}
       onClick={() => {
-        filter(name);
+        if(filter) {
+          filter(name)
+        }
       }}
       style={{
         backgroundColor: pokemonTypes[name as PokemonType],

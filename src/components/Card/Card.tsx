@@ -1,10 +1,9 @@
 import { useCallback, useContext, useMemo, useState } from "react";
-import { pokemonTypes } from "../../helpers/constants";
-import { PokemonType } from "../../types/PokemonTypes";
 import { Pokemon } from "../../types/Pokemon";
 import { Modal } from "../Modal/Modal";
 import { addDefaultSrc } from "../../helpers/helperFunctions";
 import { CollectionContext } from "../CollectionProvider";
+import { TypeButton } from "../TypeButton";
 
 type Props = {
   pokemon: Pokemon;
@@ -21,16 +20,18 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
       collection.some((pokemonCard: Pokemon) => pokemonCard.id === pokemon.id);
   }, [collection]);
 
+  const isCollected = collected(pokemon);
+
   const addPokemon = useCallback(
     (pokemon: Pokemon) => {
-      if (!collected(pokemon)) {
+      if (!isCollected) {
         setCollection((prevCollection: Pokemon[]) => [
           ...prevCollection,
           pokemon,
         ]);
       }
     },
-    [setCollection, collected]
+    [setCollection, isCollected]
   );
 
   const removePokemon = useCallback(
@@ -42,33 +43,50 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
     [setCollection]
   );
 
+  const handleButtonClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    pokemon: Pokemon
+  ) => {
+    e.stopPropagation();
+    isCollected ? removePokemon(pokemon.name) : addPokemon(pokemon);
+  };
+
   const { id, name, weight, height, types, moves } = pokemon;
   return (
     <div className="flex flex-col m-4">
-      <button
-        className="bg-white rounded w-16 pt-2 flex justify-center items-center"
-        onClick={() =>
-          collected(pokemon) ? removePokemon(pokemon.name) : addPokemon(pokemon)
-        }
-      >
-        <img
-          className="h-8"
-          src={`images/${
-            collected(pokemon) ? "pikachu" : "pokeball_small"
-          }.png`}
-          alt="pokeball"
-        />
-      </button>
       <div
-        className={`flex flex-col w-52 bg-white p-6 rounded text-sm`}
+        className={`flex flex-col w-52 bg-white p-6 rounded text-sm cursor-pointer`}
         onClick={() => setOpen(true)}
       >
         <div>
-          <div className="flex justify-between">
+          <div className="flex justify-between h-14 font-medium text-center">
             <div>
               <div>Height:</div>
               <div>{`${height / 10} m`}</div>
             </div>
+            <button onClick={(e) => handleButtonClick(e, pokemon)}>
+              <small
+                className={`${
+                  isCollected ? "opacity-0" : ""
+                } transition ease-in-out delay-300 text-juicy-red`}
+              >
+                Catch!
+              </small>
+              <img
+                className={`${
+                  isCollected ? "opacity-0" : ""
+                } h-8 transition ease-in-out delay-300`}
+                src="images/pikachu.png"
+                alt="pikachu"
+              />
+              <img
+                className={`${
+                  isCollected ? "" : "opacity-0"
+                } h-8 transition ease-in-out delay-300 relative bottom-8`}
+                src="images/pokeball_small.png"
+                alt="pokeball"
+              />
+            </button>
             <div>
               <div>Weight:</div>
               <div>{`${weight / 100} kg`}</div>
@@ -87,21 +105,14 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
           </div>
           <div className="flex">
             {types.map((item) => {
-              const { type, slot } = item;
-              return (
-                <div
-                  key={slot}
-                  className="flex w-min px-4 py-1 rounded m-1 font-medium"
-                  style={{
-                    backgroundColor: pokemonTypes[type.name as PokemonType],
-                  }}
-                >
-                  {type.name}
-                </div>
-              );
+              const {
+                type: { name },
+                slot,
+              } = item;
+              return <TypeButton key={slot} name={name} />;
             })}
           </div>
-          <div>{`Total moves: ${moves.length}`}</div>
+          <div className="text-center pt-2 font-medium">{`Total moves: ${moves.length}`}</div>
         </div>
         <Modal
           isModalOpen={open}

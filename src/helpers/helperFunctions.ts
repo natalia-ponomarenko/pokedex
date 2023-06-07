@@ -48,7 +48,7 @@ export const filterByQuery = (
 export const addDefaultSrc = (
   event: React.SyntheticEvent<HTMLImageElement, Event>
 ) => {
-  event.currentTarget.src = "images/Poke_ball.png";
+  event.currentTarget.src = "images/pokeball_small.png";
 };
 
 export const resetFilters = () => {
@@ -64,3 +64,7 @@ export const resetFilters = () => {
     return button;
   });
 };
+
+export const capitalizeWord = (word: string) => {
+  return word.replace(word[0], word[0].toUpperCase());
+}

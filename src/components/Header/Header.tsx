@@ -11,7 +11,7 @@ export const Header = () => {
       <div className="flex">
         <Link
           to={`/collection`}
-          className="font-medium text-lg text-white flex flex-col md:flex-row items-center "
+          className="font-medium text-lg text-white flex flex-col md:flex-row items-center justify-center"
         >
           Your Collection
           <img src="images/pikachu.png" alt="pikachu" className="h-8 px-2" />
