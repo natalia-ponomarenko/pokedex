@@ -1,5 +1,5 @@
 import { Bar } from "react-chartjs-2";
-import { Chart, registerables } from "chart.js";
+import { Chart, ChartOptions, registerables } from "chart.js";
 import { Statistic } from "../types/PokemonStats";
 import { capitalizeWord } from "../helpers/helperFunctions";
 Chart.register(...registerables);
@@ -13,10 +13,12 @@ export const PokemonStatsChart: React.FC<Props> = ({ stats }) => {
     const { base_stat } = stat;
     return base_stat;
   });
-  
+
   const preparedStatNames = stats.map((stat) => {
-    const { stat: { name } } = stat;
-    return capitalizeWord(name)
+    const {
+      stat: { name },
+    } = stat;
+    return capitalizeWord(name);
   });
 
   const chartData = {
@@ -45,7 +47,7 @@ export const PokemonStatsChart: React.FC<Props> = ({ stats }) => {
     ],
   };
 
-  const chartOptions = {
+  const chartOptions: ChartOptions<"bar"> = {
     indexAxis: "y",
     plugins: {
       legend: {
@@ -67,12 +69,9 @@ export const PokemonStatsChart: React.FC<Props> = ({ stats }) => {
           font: {
             size: 12,
           },
-          color: '#333',
+          color: "#333",
         },
       },
-    },
-    options: {
-      responsive: false,
     },
   };
 

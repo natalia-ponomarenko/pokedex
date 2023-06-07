@@ -6,14 +6,14 @@ type Props = {
   filter?: (name: string) => void;
 };
 
-export const TypeButton: React.FC<Props> = ({ name, filter}) => {
+export const TypeButton: React.FC<Props> = ({ name, filter }) => {
   return (
     <button
       key={name}
       id={name}
       onClick={() => {
-        if(filter) {
-          filter(name)
+        if (filter) {
+          filter(name);
         }
       }}
       style={{

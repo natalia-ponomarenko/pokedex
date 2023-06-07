@@ -67,4 +67,4 @@ export const resetFilters = () => {
 
 export const capitalizeWord = (word: string) => {
   return word.replace(word[0], word[0].toUpperCase());
-}
+};

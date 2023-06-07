@@ -28,7 +28,7 @@ export const Home: React.FC = () => {
     queryFn: () => getPokemonDetails(data),
   });
 
-  const [filteredData, setFilteredData] = useState<Pokemon[] | []>(pokemonList);
+  const [filteredData, setFilteredData] = useState<Pokemon[] | undefined>(pokemonList);
 
   useEffect(() => {
     const preparedListOfPokemons = filterByQuery(query, pokemonList);

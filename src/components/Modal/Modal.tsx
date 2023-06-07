@@ -1,9 +1,8 @@
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { addDefaultSrc } from "../../helpers/helperFunctions";
-import { Statistic } from "../../types/PokemonStats";
-import { Pokemon } from "../../types/Pokemon";
 import { PokemonStatsChart } from "../Stats";
+import { Pokemon } from "../../types/Pokemon";
 
 type Props = {
   isModalOpen: boolean;
