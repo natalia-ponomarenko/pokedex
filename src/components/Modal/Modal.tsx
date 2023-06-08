@@ -42,7 +42,7 @@ export const Modal: React.FC<Props> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-[360px] box-border transform overflow-hidden rounded-2xl bg-white p-2 text-center align-middle shadow-xl transition-all ml-screen-offset">
+              <Dialog.Panel className="w-80 box-border transform overflow-hidden rounded-2xl bg-white p-2 text-center align-middle shadow-xl transition-all lg:ml-screen-offset">
                 <Dialog.Title
                   as="h3"
                   className="text-lg font-medium leading-6 text-slate-800 capitalize"
@@ -54,6 +54,7 @@ export const Modal: React.FC<Props> = ({
                     src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
                     onError={addDefaultSrc}
                     alt={name}
+                    loading="lazy"
                     className="w-40 h-40 object-cover"
                   />
                   <PokemonStatsChart stats={stats} />

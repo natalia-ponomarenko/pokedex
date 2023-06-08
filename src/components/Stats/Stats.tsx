@@ -1,7 +1,6 @@
 import { Bar } from "react-chartjs-2";
 import { Chart, ChartOptions, registerables } from "chart.js";
-import { Statistic } from "../types/PokemonStats";
-import { capitalizeWord } from "../helpers/helperFunctions";
+import { Statistic } from "../../types/PokemonStats";
 Chart.register(...registerables);
 
 type Props = {
@@ -14,15 +13,8 @@ export const PokemonStatsChart: React.FC<Props> = ({ stats }) => {
     return base_stat;
   });
 
-  const preparedStatNames = stats.map((stat) => {
-    const {
-      stat: { name },
-    } = stat;
-    return capitalizeWord(name);
-  });
-
   const chartData = {
-    labels: preparedStatNames,
+    labels: ["Hp", "Attack", "Defence", "Sp.Attack", "Sp.Defence", "Speed"],
     datasets: [
       {
         data: preparedStatValues,

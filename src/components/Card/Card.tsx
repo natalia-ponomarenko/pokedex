@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Pokemon } from "../../types/Pokemon";
 import { Modal } from "../Modal/Modal";
 import { addDefaultSrc } from "../../helpers/helperFunctions";
@@ -9,7 +9,8 @@ type Props = {
   pokemon: Pokemon;
 };
 
-export const Card: React.FC<Props> = ({ pokemon }) => {
+export const Card: React.FC<Props> = React.memo(({ pokemon }) => {
+  console.log('card render')
   const [open, setOpen] = useState(false);
 
   const context = useContext(CollectionContext);
@@ -55,10 +56,10 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
   return (
     <div className="flex flex-col m-4">
       <div
-        className={`flex flex-col w-52 bg-white p-6 rounded text-sm cursor-pointer`}
+        className={`flex flex-col w-60 bg-white p-4 rounded text-sm cursor-pointer`}
         onClick={() => setOpen(true)}
       >
-        <div>
+        
           <div className="flex justify-between h-14 font-medium text-center">
             <div>
               <div>Height:</div>
@@ -78,6 +79,7 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
                 } h-8 transition ease-in-out delay-300`}
                 src="images/pikachu.png"
                 alt="pikachu"
+                loading="lazy"
               />
               <img
                 className={`${
@@ -85,6 +87,7 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
                 } h-8 transition ease-in-out delay-300 relative bottom-8`}
                 src="images/pokeball_small.png"
                 alt="pokeball"
+                loading="lazy"
               />
             </button>
             <div>
@@ -92,7 +95,7 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
               <div>{`${weight / 100} kg`}</div>
             </div>
           </div>
-          <div className="text-lg text-center text-slate-800 font-medium capitalize py-1">
+          <div className="text-base text-center text-slate-800 font-medium capitalize py-1">
             {name}
           </div>
           <div>
@@ -100,10 +103,11 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
               onError={addDefaultSrc}
               alt={name}
-              className="w-40 h-40 object-cover"
+              loading="lazy"
+              className="w-40 h-40 object-cover mx-auto"
             />
           </div>
-          <div className="flex">
+          <div className="flex justify-center">
             {types.map((item) => {
               const {
                 type: { name },
@@ -113,7 +117,7 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
             })}
           </div>
           <div className="text-center pt-2 font-medium">{`Total moves: ${moves.length}`}</div>
-        </div>
+        
         <Modal
           isModalOpen={open}
           closeModal={() => setOpen(false)}
@@ -122,4 +126,4 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
       </div>
     </div>
   );
-};
+});

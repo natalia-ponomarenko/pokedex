@@ -1,7 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { getAllPokemons, getPokemonDetails } from "../../api/pokemon";
-import { filterByQuery, filterByType, resetFilters } from "../../helpers/helperFunctions";
+import {
+  filterByQuery,
+  filterByType,
+  resetFilters,
+} from "../../helpers/helperFunctions";
 import { URL10 } from "../../helpers/constants";
 import { SingleValue } from "react-select";
 import { SelectOption } from "../../types/SelectOption";
@@ -28,7 +32,9 @@ export const Home: React.FC = () => {
     queryFn: () => getPokemonDetails(data),
   });
 
-  const [filteredData, setFilteredData] = useState<Pokemon[] | undefined>(pokemonList);
+  const [filteredData, setFilteredData] = useState<Pokemon[] | undefined>(
+    pokemonList
+  );
 
   useEffect(() => {
     const preparedListOfPokemons = filterByQuery(query, pokemonList);
@@ -68,10 +74,11 @@ export const Home: React.FC = () => {
 
   const isLodingInProgress = isLoading || areDetailsLoading;
   const noPokemonsFound =
-    filterArray.length !== 0 && filteredData?.length === 0;
+    (filterArray.length !== 0 && filteredData?.length === 0) ||
+    (query.length !== 0 && filteredData?.length === 0);
   return (
-    <>
-      <div className="text-slate-800 ml-screen-offset">
+    <div className="lg:ml-screen-offset">
+      {/* <div className="text-slate-800 lg:max-w-[1450px] ml-auto mr-auto"> */}
         <TypesList filter={handleFilterChange} />
 
         <div className="flex justify-center px-2">
@@ -108,6 +115,6 @@ export const Home: React.FC = () => {
           )}
         </div>
       </div>
-    </>
+    // </div>
   );
 };
