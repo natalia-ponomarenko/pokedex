@@ -1,43 +1,59 @@
 import React from "react";
 import { Pokemon } from "../../types/Pokemon";
 import { Card } from "../Card";
-import { FixedSizeGrid as Grid } from "react-window";
+import { useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
 
 type Props = {
   list: Pokemon[] | undefined;
 };
 
 export const PokemonList: React.FC<Props> = ({ list }) => {
-  const columnCount = Math.floor(window.innerWidth / 350);
-  const rowCount = list ? Math.ceil(list.length / columnCount) : 0;
+  const [currentItems, setCurrentItems] = useState<Pokemon[] | []>([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [itemOffset, setItemOffset] = useState(0);
+  const itemsPerPage = 10;
 
-  const itemRenderer = ({ columnIndex, rowIndex, style }: any) => {
-    const index = rowIndex * columnCount + columnIndex;
-    let item;
+  useEffect(() => {
     if (list) {
-      item = list && list[index];
+      const endOffset = itemOffset + itemsPerPage;
+      setCurrentItems(list.slice(itemOffset, endOffset));
+      setPageCount(Math.ceil(list.length / itemsPerPage));
     }
+  }, [itemOffset, itemsPerPage, list]);
 
-    return (
-      <div style={style}>{item && <Card key={item.name} pokemon={item} />}</div>
-    );
+  const handlePageClick = (event: { selected: number }) => {
+    if (list) {
+      const newOffset = (event.selected * itemsPerPage) % list.length;
+      setItemOffset(newOffset);
+    }
   };
 
-  {
-    /* // // <div className="flex flex-wrap justify-center py-2 will-change-transform scroll-container"></div>*/
-  }
+  const shouldRenderPagination = list && list.length > itemsPerPage;
+
   return (
-    <div className="sm:max-w-xs md:max-w-[1000px] mx-auto text-center">
-      <Grid
-        width={window.innerWidth}
-        height={window.innerHeight}
-        columnCount={columnCount}
-        rowCount={rowCount}
-        columnWidth={250}
-        rowHeight={350}
-      >
-        {itemRenderer}
-      </Grid>
-    </div>
+    <>
+      <div className="flex flex-wrap justify-center py-2 will-change-transform scroll-container">
+        {currentItems.map((pokemon: Pokemon) => (
+          <Card key={pokemon.name} pokemon={pokemon} />
+        ))}
+      </div>
+      {shouldRenderPagination && (
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={1}
+          pageCount={pageCount}
+          previousLabel="<"
+          renderOnZeroPageCount={null}
+          containerClassName="flex justify-between"
+          pageLinkClassName="flex items-center justify-center p-1 m-1 h-8 w-10 rounded border border-red-600 text-white bg-red-600 text-lg"
+          previousClassName=""
+          nextLinkClassName=""
+          activeLinkClassName="bg-juicy-red text-xl"
+        />
+      )}
+    </>
   );
 };

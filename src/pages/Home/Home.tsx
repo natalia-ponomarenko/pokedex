@@ -1,120 +1,68 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
-import { getAllPokemons, getPokemonDetails } from "../../api/pokemon";
-import {
-  filterByQuery,
-  filterByType,
-  resetFilters,
-} from "../../helpers/helperFunctions";
-import { URL10 } from "../../helpers/constants";
-import { SingleValue } from "react-select";
-import { SelectOption } from "../../types/SelectOption";
-import { TypesList } from "../../components/TypesList";
+import { getPokemons, getPokemonDetails } from "../../api/pokemon";
+import { URL20, URL_ALL } from "../../helpers/constants";
 import { Search } from "../../components/Search";
 import { Loader } from "../../components/Loader";
-import { Button } from "../../components/Button";
 import { PokemonList } from "../../components/PokemonList";
 import { Error } from "../../components/Error";
-import { PokemonPerPageSelect as Select } from "../../components/Select";
 import { Pokemon } from "../../types/Pokemon";
+import { filterByQuery } from "../../helpers/helperFunctions";
+import { ReturnButton } from "../../components/ReturnButton";
+
 
 export const Home: React.FC = () => {
-  const [pageUrl, setPageUrl] = useState(URL10);
-  const [query, setQuery] = useState("");
-  const [filterArray, setFilterArray] = useState<string[]>([]);
+  const [query, setQuery] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const { isLoading, isError, data } = useQuery(["pokemons", pageUrl], () =>
-    getAllPokemons(pageUrl)
+  const { isLoading, isError, data } = useQuery(["pokemons"], () =>
+    getPokemons(URL_ALL)
   );
 
   const { data: pokemonList, isLoading: areDetailsLoading } = useQuery({
     queryKey: ["pokemonDetails", data],
     queryFn: () => getPokemonDetails(data),
+    enabled: !!data,
   });
 
-  const [filteredData, setFilteredData] = useState<Pokemon[] | undefined>(
-    pokemonList
-  );
+  const [filteredPokemonList, setFilteredPokemonList] = useState<
+    Pokemon[] | undefined
+  >(pokemonList);
 
   useEffect(() => {
-    const preparedListOfPokemons = filterByQuery(query, pokemonList);
-    setFilteredData(preparedListOfPokemons);
-    setFilterArray([]);
-    resetFilters();
+    setFilteredPokemonList(filterByQuery(query, pokemonList));
   }, [query, pokemonList]);
 
-  const handleFilterChange = useCallback(
-    (value: string) => {
-      const result = filterByType(value, filterArray, pokemonList);
-      setFilterArray(result.updatedFilterList);
-      setFilteredData(
-        result.updatedFilterList.length !== 0
-          ? result.filteredData
-          : pokemonList
-      );
-    },
-    [filterArray, pokemonList]
-  );
+  const handleButtonClick = useCallback(() => {
+    setFilteredPokemonList(pokemonList);
+    setQuery("");
+  }, [pokemonList]);
 
-  const handlePageChange = useCallback(
-    (update?: string | null, option?: SingleValue<SelectOption>) => {
-      if (update) {
-        setPageUrl(update);
-      }
+  const isLoadingInProgress = isLoading || areDetailsLoading || loading;
+  const shouldDisplayReturnButton =
+    (filteredPokemonList?.length === 0 || filteredPokemonList?.length === 1) &&
+    !isLoadingInProgress;
 
-      if (option) {
-        setPageUrl(option.value);
-      }
-
-      setFilterArray([]);
-      resetFilters();
-    },
-    [setPageUrl, setFilterArray]
-  );
-
-  const isLodingInProgress = isLoading || areDetailsLoading;
-  const noPokemonsFound =
-    (filterArray.length !== 0 && filteredData?.length === 0) ||
-    (query.length !== 0 && filteredData?.length === 0);
   return (
-    <div className="lg:ml-screen-offset">
-      {/* <div className="text-slate-800 lg:max-w-[1450px] ml-auto mr-auto"> */}
-        <TypesList filter={handleFilterChange} />
-
-        <div className="flex justify-center px-2">
-          <Select handleChange={handlePageChange} />
-          <Search filterValue={query} handleFilter={setQuery} />
-        </div>
-
-        <div className="flex flex-col mx-9 my-4 justify-center items-center">
-          {isLodingInProgress ? (
-            <Loader />
-          ) : (
-            <>
-              <div className="flex justify-center">
-                <Button
-                  handleAction={() => handlePageChange(data?.previous)}
-                  disabled={!data?.previous}
-                >
-                  Previous
-                </Button>
-                <Button
-                  handleAction={() => handlePageChange(data?.next)}
-                  disabled={!data?.next}
-                >
-                  Next
-                </Button>
-              </div>
-              <PokemonList list={filteredData} />
-            </>
-          )}
-
-          {isError && <Error text="Ooops! Something went wrong..." />}
-          {noPokemonsFound && !isLodingInProgress && (
-            <Error text="No pokemons found!" />
-          )}
-        </div>
+    <div className="text-slate-800 lg:max-w-[1450px] mx-auto">
+      <div className="flex justify-center relative px-2">
+        <Search setQuery={setQuery} setLoading={setLoading} />
       </div>
-    // </div>
+
+      <div className="flex flex-col mx-9 my-4 justify-center items-center">
+        {isLoadingInProgress && !isError ? (
+          <Loader />
+        ) : (
+          <PokemonList list={filteredPokemonList} />
+        )}
+        {isError && <Error text="Ooops! Something went wrong..." />}
+        {filteredPokemonList?.length === 0 && !isLoadingInProgress && (
+          <Error text="Sorry, pokemon isn't found" />
+        )}
+        {shouldDisplayReturnButton && (
+          <ReturnButton handleAction={handleButtonClick} />
+        )}
+      </div>
+    </div>
   );
 };

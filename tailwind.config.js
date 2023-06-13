@@ -9,9 +9,6 @@ export default {
       colors: {
         "juicy-red": "#ff0000",
       },
-      spacing: {
-        'screen-offset': 'calc(100vw - 100%)',
-      },
     },
   },
   plugins: [],

@@ -1,22 +1,10 @@
 import { PokemonTypes } from "../types/PokemonTypes";
-import { SelectOption } from "../types/SelectOption";
-
-export const URL10 = "https://pokeapi.co/api/v2/pokemon/?limit=10";
 
 export const URL20 = "https://pokeapi.co/api/v2/pokemon/?limit=20";
-
-export const URL50 = "https://pokeapi.co/api/v2/pokemon/?limit=50";
 
 export const URL_ALL = "https://pokeapi.co/api/v2/pokemon/?limit=1281";
 
 export const TYPE_URL = "https://pokeapi.co/api/v2/type/";
-
-export const options: SelectOption[] = [
-  { value: URL10, label: "10" },
-  { value: URL20, label: "20" },
-  { value: URL50, label: "50" },
-  { value: URL_ALL, label: "all" },
-];
 
 export const pokemonTypes: PokemonTypes = {
   normal: "#A8A77A",

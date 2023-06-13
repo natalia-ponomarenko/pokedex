@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { CollectionContext } from "../../components/CollectionProvider";
 import { PokemonList } from "../../components/PokemonList";
 import { Link } from "react-router-dom";
+import { ReturnButton } from "../../components/ReturnButton";
 
 export const Collection: React.FC = () => {
   const context = useContext(CollectionContext);
@@ -10,7 +11,7 @@ export const Collection: React.FC = () => {
   return (
     <div className="text-center">
       <Link to="/">
-        <button type="button" className="bg-red-600 p-2 rounded text-white m-1">Back to list</button>
+        <ReturnButton />
       </Link>
       {collection.length !== 0 ? (
         <PokemonList list={collection} />

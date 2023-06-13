@@ -1,25 +1,16 @@
 import { TYPE_URL } from "../helpers/constants";
+import { Pokemon } from "../types/Pokemon";
 import { PokemonApiResponse } from "../types/PokemonApiResponse";
 import { PokemonTypeApiResponse } from "../types/PokemonTypeApiResponse";
+import { request } from "../utils/fetchPokemon";
 
-export const request = <T>(url: string): Promise<T> =>
-  fetch(url).then((response) => {
-    if (!response.ok) {
-      throw new Error("Pokemons weren't loaded");
-    }
-
-    return response.json() as Promise<T>;
-  });
-
-export const getAllPokemons = (url: string): Promise<PokemonApiResponse> =>
+export const getPokemons = (url: string): Promise<PokemonApiResponse | undefined> =>
   request(url);
 
 export const getPokemonTypes = (): Promise<PokemonTypeApiResponse> =>
   request(TYPE_URL);
 
-export const getPokemonDetails = async (
-  data: PokemonApiResponse | undefined
-) => {
+export const getPokemonDetails = async (data: PokemonApiResponse | undefined): Promise<Pokemon[]> => {
   if (data) {
     const pokemonList = await Promise.all(
       data.results.map(async (pokemon) => {

@@ -4,17 +4,23 @@ import { Modal } from "../Modal/Modal";
 import { addDefaultSrc } from "../../helpers/helperFunctions";
 import { CollectionContext } from "../CollectionProvider";
 import { TypeButton } from "../TypeButton";
+import { useSpring, animated } from "react-spring";
 
 type Props = {
   pokemon: Pokemon;
 };
 
-export const Card: React.FC<Props> = React.memo(({ pokemon }) => {
-  console.log('card render')
+export const Card: React.FC<Props> = ({ pokemon }) => {
   const [open, setOpen] = useState(false);
 
   const context = useContext(CollectionContext);
   const { collection, setCollection } = context;
+
+  const styles = useSpring({
+    from: { opacity: 0, transform: "translateY(-10px)" },
+    to: { opacity: 1, transform: "translateY(0)" },
+    config: { duration: 400 },
+  });
 
   const collected = useMemo(() => {
     return (pokemon: Pokemon) =>
@@ -54,12 +60,12 @@ export const Card: React.FC<Props> = React.memo(({ pokemon }) => {
 
   const { id, name, weight, height, types, moves } = pokemon;
   return (
-    <div className="flex flex-col m-4">
-      <div
-        className={`flex flex-col w-60 bg-white p-4 rounded text-sm cursor-pointer`}
-        onClick={() => setOpen(true)}
-      >
-        
+    <animated.div style={styles}>
+      <div className="flex flex-col m-4 justify-center">
+        <div
+          className={`flex flex-col w-60 bg-white p-4 rounded text-sm cursor-pointer`}
+          onClick={() => setOpen(true)}
+        >
           <div className="flex justify-between h-14 font-medium text-center">
             <div>
               <div>Height:</div>
@@ -117,13 +123,14 @@ export const Card: React.FC<Props> = React.memo(({ pokemon }) => {
             })}
           </div>
           <div className="text-center pt-2 font-medium">{`Total moves: ${moves.length}`}</div>
-        
-        <Modal
-          isModalOpen={open}
-          closeModal={() => setOpen(false)}
-          pokemon={pokemon}
-        />
+
+          <Modal
+            isModalOpen={open}
+            closeModal={() => setOpen(false)}
+            pokemon={pokemon}
+          />
+        </div>
       </div>
-    </div>
+    </animated.div>
   );
-});
+};

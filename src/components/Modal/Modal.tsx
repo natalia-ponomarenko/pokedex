@@ -42,7 +42,7 @@ export const Modal: React.FC<Props> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-80 box-border transform overflow-hidden rounded-2xl bg-white p-2 text-center align-middle shadow-xl transition-all lg:ml-screen-offset">
+              <Dialog.Panel className="w-80 box-border transform overflow-hidden rounded-2xl bg-white p-2 text-center align-middle shadow-xl transition-all">
                 <Dialog.Title
                   as="h3"
                   className="text-lg font-medium leading-6 text-slate-800 capitalize"
