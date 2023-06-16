@@ -1,21 +1,17 @@
-import { pokemonTypes } from "../../helpers/constants";
+import { pokemonTypes } from "../../utils/constants";
 import { PokemonType } from "../../types/PokemonTypes";
 
 type Props = {
   name: string;
-  filter?: (name: string) => void;
+  setFilter: (filter: string) => void;
 };
 
-export const TypeButton: React.FC<Props> = ({ name, filter }) => {
+export const TypeButton: React.FC<Props> = ({ name, setFilter }) => {
   return (
     <button
       key={name}
       id={name}
-      onClick={() => {
-        if (filter) {
-          filter(name);
-        }
-      }}
+      onClick={() => setFilter(name)}
       style={{
         backgroundColor: pokemonTypes[name as PokemonType],
       }}

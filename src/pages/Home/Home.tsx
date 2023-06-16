@@ -1,66 +1,71 @@
-import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
-import { getPokemons, getPokemonDetails } from "../../api/pokemon";
-import { URL20, URL_ALL } from "../../helpers/constants";
+import { getPokemons, getPokemonsByType } from "../../api/pokemon";
 import { Search } from "../../components/Search";
 import { Loader } from "../../components/Loader";
 import { PokemonList } from "../../components/PokemonList";
 import { Error } from "../../components/Error";
-import { Pokemon } from "../../types/Pokemon";
-import { filterByQuery } from "../../helpers/helperFunctions";
+import { filterByQuery } from "../../utils/helperFunctions";
 import { ReturnButton } from "../../components/ReturnButton";
-
+import { TypesList } from "../../components/TypesList";
+import { TYPE_URL, URL_ALL_POKEMONS } from "../../utils/constants";
+import { Pokemon } from "../../types/Pokemon";
+import { usePokemonQuery } from "../../hooks/usePokemonQuery";
 
 export const Home: React.FC = () => {
   const [query, setQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [filter, setFilter] = useState<string>("");
 
-  const { isLoading, isError, data } = useQuery(["pokemons"], () =>
-    getPokemons(URL_ALL)
+  const {
+    isLoading,
+    isError,
+    data: pokemonList,
+  } = usePokemonQuery(["pokemons"], () => getPokemons(URL_ALL_POKEMONS));
+
+  const {
+    isLoading: areTypeLoading,
+    isError: isTypeError,
+    data: typeData,
+  } = usePokemonQuery(["pokemonsByType", filter], () =>
+    getPokemonsByType(`${TYPE_URL}${filter}`)
   );
-
-  const { data: pokemonList, isLoading: areDetailsLoading } = useQuery({
-    queryKey: ["pokemonDetails", data],
-    queryFn: () => getPokemonDetails(data),
-    enabled: !!data,
-  });
 
   const [filteredPokemonList, setFilteredPokemonList] = useState<
     Pokemon[] | undefined
   >(pokemonList);
 
   useEffect(() => {
+    setFilteredPokemonList(typeData);
+  }, [filter, typeData]);
+
+  useEffect(() => {
     setFilteredPokemonList(filterByQuery(query, pokemonList));
   }, [query, pokemonList]);
 
-  const handleButtonClick = useCallback(() => {
+  const resetFiltersAndRetrieveList = useCallback(() => {
     setFilteredPokemonList(pokemonList);
-    setQuery("");
   }, [pokemonList]);
 
-  const isLoadingInProgress = isLoading || areDetailsLoading || loading;
-  const shouldDisplayReturnButton =
-    (filteredPokemonList?.length === 0 || filteredPokemonList?.length === 1) &&
-    !isLoadingInProgress;
+  const isLoadingInProgress = isLoading || loading || areTypeLoading;
+  const error = isError || isTypeError;
 
   return (
     <div className="text-slate-800 lg:max-w-[1450px] mx-auto">
-      <div className="flex justify-center relative px-2">
+      <TypesList setFilter={setFilter} />
+      <div className="flex justify-center px-2 mt-4">
         <Search setQuery={setQuery} setLoading={setLoading} />
+        <ReturnButton handleAction={resetFiltersAndRetrieveList} />
       </div>
 
       <div className="flex flex-col mx-9 my-4 justify-center items-center">
-        {isLoadingInProgress && !isError ? (
+        {isLoadingInProgress && !error ? (
           <Loader />
         ) : (
           <PokemonList list={filteredPokemonList} />
         )}
-        {isError && <Error text="Ooops! Something went wrong..." />}
+        {error && <Error text="Ooops! Something went wrong..." />}
         {filteredPokemonList?.length === 0 && !isLoadingInProgress && (
-          <Error text="Sorry, pokemon isn't found" />
-        )}
-        {shouldDisplayReturnButton && (
-          <ReturnButton handleAction={handleButtonClick} />
+          <Error text="Apologies, but what you're looking for could not be found" />
         )}
       </div>
     </div>

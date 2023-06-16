@@ -24,18 +24,18 @@ export const Search: React.FC<Props> = ({ setQuery, setLoading }) => {
   };
 
   return (
-    <div className="relative mt-4">
+    <div className="relative">
       <input
         type="text"
         id="search-query"
-        className="block box-border p-2.5 w-56 z-1 text-sm rounded focus:outline-none focus:ring-juicy-red focus:border-juicy-red border border-[#CCCCCC]"
+        className="block box-border p-2.5 w-72 z-1 text-sm rounded-lg transition ease-in-out delay-100 focus:outline-none focus:ring-1 focus:ring-juicy-red border border-[#CCCCCC]"
         placeholder="Find a pokemon"
         value={value}
         onChange={handleInputValue}
       />
       <button
         type="submit"
-        className="absolute top-0 left-[98%] p-2.5 text-sm font-medium text-white bg-red-600 rounded-r-lg border border-red-600 hover:bg-juicy-red"
+        className="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-red-600 transition ease-in-out delay-100 rounded-r-lg border border-red-600 hover:bg-juicy-red"
         onClick={handleButtonClick}
         disabled={!value.length}
       >

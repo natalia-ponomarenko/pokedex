@@ -43,14 +43,15 @@ export const PokemonList: React.FC<Props> = ({ list }) => {
           breakLabel="..."
           nextLabel=">"
           onPageChange={handlePageClick}
-          pageRangeDisplayed={1}
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={1}
           pageCount={pageCount}
           previousLabel="<"
           renderOnZeroPageCount={null}
           containerClassName="flex justify-between"
           pageLinkClassName="flex items-center justify-center p-1 m-1 h-8 w-10 rounded border border-red-600 text-white bg-red-600 text-lg"
-          previousClassName=""
-          nextLinkClassName=""
+          previousClassName="flex items-center justify-center p-1 m-1 h-8 w-10 rounded border border-red-600 text-white bg-red-600 text-lg"
+          nextLinkClassName="flex items-center justify-center p-1 m-1 h-8 w-10 rounded border border-red-600 text-white bg-red-600 text-lg"
           activeLinkClassName="bg-juicy-red text-xl"
         />
       )}

@@ -1,10 +1,10 @@
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Pokemon } from "../../types/Pokemon";
 import { Modal } from "../Modal/Modal";
-import { addDefaultSrc } from "../../helpers/helperFunctions";
+import { addDefaultSrc } from "../../utils/helperFunctions";
 import { CollectionContext } from "../CollectionProvider";
-import { TypeButton } from "../TypeButton";
 import { useSpring, animated } from "react-spring";
+import { TypeItem } from "../TypeItem";
 
 type Props = {
   pokemon: Pokemon;
@@ -15,6 +15,8 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
 
   const context = useContext(CollectionContext);
   const { collection, setCollection } = context;
+
+  const { id, name, weight, height, types, moves } = pokemon;
 
   const styles = useSpring({
     from: { opacity: 0, transform: "translateY(-10px)" },
@@ -58,7 +60,6 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
     isCollected ? removePokemon(pokemon.name) : addPokemon(pokemon);
   };
 
-  const { id, name, weight, height, types, moves } = pokemon;
   return (
     <animated.div style={styles}>
       <div className="flex flex-col m-4 justify-center">
@@ -119,7 +120,7 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
                 type: { name },
                 slot,
               } = item;
-              return <TypeButton key={slot} name={name} />;
+              return <TypeItem key={slot} name={name} />;
             })}
           </div>
           <div className="text-center pt-2 font-medium">{`Total moves: ${moves.length}`}</div>

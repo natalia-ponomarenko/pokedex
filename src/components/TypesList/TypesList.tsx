@@ -4,10 +4,10 @@ import { Error } from "../Error";
 import { TypeButton } from "../TypeButton";
 
 type Props = {
-  filter: (name: string) => void;
-};
+  setFilter: (filter: string) => void;
+}
 
-export const TypesList: React.FC<Props> = ({ filter }) => {
+export const TypesList: React.FC<Props> = ({ setFilter }) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["types"],
     queryFn: getPokemonTypes,
@@ -27,7 +27,7 @@ export const TypesList: React.FC<Props> = ({ filter }) => {
             <TypeButton
               key={type.name}
               name={type.name}
-              filter={filter}
+              setFilter={setFilter}
             />
           ))}
         </div>

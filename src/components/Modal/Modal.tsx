@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { addDefaultSrc } from "../../helpers/helperFunctions";
+import { addDefaultSrc } from "../../utils/helperFunctions";
 import { PokemonStatsChart } from "../Stats";
 import { Pokemon } from "../../types/Pokemon";
 
@@ -16,6 +16,7 @@ export const Modal: React.FC<Props> = ({
   pokemon,
 }) => {
   const { name, id, stats } = pokemon;
+
   return (
     <Transition appear show={isModalOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -59,7 +60,6 @@ export const Modal: React.FC<Props> = ({
                   />
                   <PokemonStatsChart stats={stats} />
                 </div>
-
                 <div className="mt-4">
                   <button
                     type="button"

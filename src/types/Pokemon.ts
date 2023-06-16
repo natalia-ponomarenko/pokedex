@@ -1,24 +1,21 @@
 import { Statistic } from "./PokemonStats";
 
+export interface PokemonUrl {
+  name: string;
+  url: string;
+}
+
+export interface PokemonTypeIndividual {
+  slot: number;
+  type: PokemonUrl;
+}
+
 export interface Pokemon {
   id: number;
   name: string;
   height: number;
   weight: number;
   types: PokemonTypeIndividual[];
-  moves: PokemonMove[];
+  moves: PokemonUrl[];
   stats: Statistic[];
-}
-
-export interface PokemonTypeIndividual {
-  slot: number;
-  type: {
-    name: string;
-    url: string;
-  };
-}
-
-interface PokemonMove {
-  name: string;
-  url: string;
 }

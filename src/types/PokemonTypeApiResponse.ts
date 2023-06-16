@@ -5,7 +5,7 @@ export interface PokemonTypeApiResponse {
   results: PokemonType[];
 }
 
-export interface PokemonType {
+interface PokemonType {
   name: string;
   url: string;
 }

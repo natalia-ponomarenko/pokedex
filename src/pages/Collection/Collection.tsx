@@ -11,7 +11,9 @@ export const Collection: React.FC = () => {
   return (
     <div className="text-center">
       <Link to="/">
-        <ReturnButton />
+        <ReturnButton>
+          <p className="ml-1">Back to the list</p>
+          </ReturnButton>
       </Link>
       {collection.length !== 0 ? (
         <PokemonList list={collection} />
