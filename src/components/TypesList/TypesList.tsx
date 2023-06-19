@@ -14,7 +14,7 @@ export const TypesList: React.FC<Props> = ({ setFilter }) => {
   });
 
   return (
-    <div className="flex my-8 mx-auto px-5 max-w-4xl">
+    <div className="flex my-4 mx-auto px-5 max-w-4xl">
       {isLoading && (
         <p>Loading types...</p>
       )}

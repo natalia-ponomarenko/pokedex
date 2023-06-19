@@ -16,6 +16,17 @@ export interface Pokemon {
   height: number;
   weight: number;
   types: PokemonTypeIndividual[];
-  moves: PokemonUrl[];
+  moves: PokemonMoves[];
   stats: Statistic[];
+}
+
+export interface PokemonMoves {
+  move: { name: string; url: string };
+  version_group_details: [
+    {
+      level_learned_at: number;
+      move_learn_method: PokemonTypeIndividual;
+      version_group: PokemonTypeIndividual;
+    }
+  ];
 }

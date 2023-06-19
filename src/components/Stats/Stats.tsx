@@ -1,3 +1,4 @@
+import 'chartjs-plugin-datalabels';
 import { Bar } from "react-chartjs-2";
 import { Chart, ChartOptions, registerables } from "chart.js";
 import { Statistic } from "../../types/PokemonStats";
@@ -14,7 +15,7 @@ export const PokemonStatsChart: React.FC<Props> = ({ stats }) => {
   });
 
   const chartData = {
-    labels: ["Hp", "Attack", "Defence", "Sp.Attack", "Sp.Defence", "Speed"],
+    labels: ["HP", "ATK", "DEF", "SATK", "SDEF", "SPD"],
     datasets: [
       {
         data: preparedStatValues,
@@ -46,6 +47,7 @@ export const PokemonStatsChart: React.FC<Props> = ({ stats }) => {
         display: false,
       },
     },
+    maintainAspectRatio: false,
     scales: {
       x: {
         beginAtZero: true,
@@ -54,6 +56,7 @@ export const PokemonStatsChart: React.FC<Props> = ({ stats }) => {
         },
       },
       y: {
+        beginAtZero: true,
         grid: {
           display: false,
         },
@@ -68,8 +71,8 @@ export const PokemonStatsChart: React.FC<Props> = ({ stats }) => {
   };
 
   return (
-    <div className="w-full">
-      <Bar data={chartData} options={chartOptions} />
-    </div>
+    <div className='w-full h-full'>
+      <Bar width={'100%'} height={'250px'} data={chartData} options={chartOptions} />
+      </div>
   );
 };

@@ -10,11 +10,11 @@ export const Collection: React.FC = () => {
 
   return (
     <div className="text-center">
-      <Link to="/">
-        <ReturnButton>
-          <p className="ml-1">Back to the list</p>
-          </ReturnButton>
-      </Link>
+      <div className="m-2">
+        <Link to="/">
+          <ReturnButton />
+        </Link>
+      </div>
       {collection.length !== 0 ? (
         <PokemonList list={collection} />
       ) : (
