@@ -1,4 +1,4 @@
-import 'chartjs-plugin-datalabels';
+import "chartjs-plugin-datalabels";
 import { Bar } from "react-chartjs-2";
 import { Chart, ChartOptions, registerables } from "chart.js";
 import { Statistic } from "../../types/PokemonStats";
@@ -6,35 +6,29 @@ Chart.register(...registerables);
 
 type Props = {
   stats: Statistic[];
+  color: string;
 };
 
-export const PokemonStatsChart: React.FC<Props> = ({ stats }) => {
+export const PokemonStatsChart: React.FC<Props> = ({ stats, color }) => {
   const preparedStatValues = stats.map((stat) => {
     const { base_stat } = stat;
     return base_stat;
   });
 
   const chartData = {
-    labels: ["HP", "ATK", "DEF", "SATK", "SDEF", "SPD"],
+    labels: [
+      `HP ${preparedStatValues[0]}`,
+      `ATK ${preparedStatValues[1]}`,
+      `DEF ${preparedStatValues[2]}`,
+      `SATK ${preparedStatValues[3]}`,
+      `SDEF ${preparedStatValues[4]}`,
+      `SPD ${preparedStatValues[5]}`,
+    ],
     datasets: [
       {
         data: preparedStatValues,
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.6)",
-          "rgba(54, 162, 235, 0.6)",
-          "rgba(255, 206, 86, 0.6)",
-          "rgba(75, 192, 192, 0.6)",
-          "rgba(153, 102, 255, 0.6)",
-          "rgba(255, 159, 64, 0.6)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-        ],
+        backgroundColor: color,
+        borderColor: color,
         borderWidth: 1,
       },
     ],
@@ -62,7 +56,8 @@ export const PokemonStatsChart: React.FC<Props> = ({ stats }) => {
         },
         ticks: {
           font: {
-            size: 12,
+            size: 14,
+            weight: 'bold',
           },
           color: "#333",
         },
@@ -71,8 +66,13 @@ export const PokemonStatsChart: React.FC<Props> = ({ stats }) => {
   };
 
   return (
-    <div className='w-full h-full'>
-      <Bar width={'100%'} height={'250px'} data={chartData} options={chartOptions} />
-      </div>
+    <div className="w-full h-full">
+      <Bar
+        width={"100%"}
+        height={"230px"}
+        data={chartData}
+        options={chartOptions}
+      />
+    </div>
   );
 };

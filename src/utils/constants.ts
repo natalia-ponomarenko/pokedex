@@ -1,6 +1,6 @@
 import { PokemonTypes } from "../types/PokemonTypes";
 
-const POKEMON_COUNT = 300;
+const POKEMON_COUNT = 1000;
 
 export const URL_ALL_POKEMONS = `https://pokeapi.co/api/v2/pokemon/?limit=${POKEMON_COUNT}`;
 

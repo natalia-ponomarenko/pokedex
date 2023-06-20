@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import { Pokemon } from "../../types/Pokemon";
 import { Modal } from "../Modal/Modal";
-import { addDefaultSrc } from "../../utils/helperFunctions";
+import { addDefaultSrc, convertPokemonId } from "../../utils/helperFunctions";
 import { CollectionContext } from "../CollectionProvider";
 import { useSpring, animated } from "react-spring";
 import { pokemonTypes } from "../../utils/constants";
@@ -17,7 +17,7 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
   const context = useContext(CollectionContext);
   const { collection, setCollection } = context;
 
-  const { name, types } = pokemon;
+  const { name, types, id } = pokemon;
   const mainType = types[0].type.name;
 
   const styles = useSpring({
@@ -62,27 +62,22 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
     isCollected ? removePokemon(pokemon.name) : addPokemon(pokemon);
   };
 
+  const convertedPokemonId = convertPokemonId(id);
+
   return (
     <animated.div style={styles}>
-      <div className="flex flex-col m-4 justify-center font-semibold font-poppins">
+      <div className="flex flex-col m-4 font-semibold font-poppins">
         <div
-          className={`flex flex-col w-60 shadow-md bg-white rounded-lg text-sm cursor-pointer relative`}
+          className={`flex flex-col w-60 h-72 shadow-md bg-white rounded-lg text-sm cursor-pointer relative`}
           onClick={() => setOpen(true)}
         >
-          <div className="h-16 py-2 px-4">
+          <div className="h-16 py-4 px-4 flex justify-between">
             <button onClick={(e) => handleButtonClick(e, pokemon)}>
-              <small
-                className={`${
-                  isCollected ? "opacity-0" : ""
-                } transition ease-in-out delay-300 text-juicy-red`}
-              >
-                Catch!
-              </small>
               <img
                 className={`${
                   isCollected ? "opacity-0" : ""
                 } h-8 transition ease-in-out delay-300`}
-                src="images/pikachu.png"
+                src="images/pokeball_open.png"
                 alt="pikachu"
                 loading="lazy"
               />
@@ -95,21 +90,26 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
                 loading="lazy"
               />
             </button>
+            <p className="text-lg py-1">{`#${convertedPokemonId}`}</p>
           </div>
 
-          <img
-            src={`https://img.pokemondb.net/sprites/home/normal/2x/${name}.jpg`}
-            // src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
-            onError={addDefaultSrc}
-            alt={name}
-            loading="lazy"
-            className="w-4/5 object-cover mx-auto z-10"
-          />
+          <div className="relative h-full flex justify-center">
+            <div className="w-24 absolute right-2 z-10">
+              <img src="images/pokeball_background.png" alt="pokeball white" />
+            </div>
+            <img
+              src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${convertedPokemonId}.png`}
+              onError={addDefaultSrc}
+              alt={name}
+              loading="lazy"
+              className="w-4/5 object-cover z-20 absolute top-0"
+            />
+          </div>
           <div
             style={{
               backgroundColor: pokemonTypes[mainType as PokemonType],
             }}
-            className="w-full rounded-lg py-1"
+            className="w-full rounded-lg py-2 absolute bottom-0"
           >
             <p className="text-lg text-white text-center font-600 capitalize">
               {name}
@@ -119,6 +119,7 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
             isModalOpen={open}
             closeModal={() => setOpen(false)}
             pokemon={pokemon}
+            pokemonId={convertedPokemonId}
           />
         </div>
       </div>

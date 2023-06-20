@@ -15,16 +15,19 @@ type Props = {
   isModalOpen: boolean;
   closeModal: () => void;
   pokemon: Pokemon;
+  pokemonId: string;
 };
 
 export const Modal: React.FC<Props> = ({
   isModalOpen,
   closeModal,
   pokemon,
+  pokemonId,
 }) => {
   const { name, stats, types, height, weight, moves } = pokemon;
   const mainType = types[0].type.name;
   const mainMove = moves[0].move.name;
+  const pokemonMainTypeColor = pokemonTypes[mainType as PokemonType];
 
   return (
     <Transition appear show={isModalOpen} as={Fragment}>
@@ -36,22 +39,24 @@ export const Modal: React.FC<Props> = ({
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4 text-center">
             <Transition.Child as={Fragment} {...modalTransitionStyles}>
-              <Dialog.Panel className="w-4/5 box-border p-4 transform overflow-hidden rounded-2xl bg-white text-center align-middle shadow-xl transition-all font-poppins">
+              <Dialog.Panel className="w-full md:max-w-md box-border p-4 transform overflow-hidden rounded-2xl bg-white text-center align-middle shadow-xl transition-all font-poppins">
+                <div className="flex items-center py-4 text-2xl">
+                  <i className="fa-solid fa-arrow-left p-1" onClick={closeModal}></i>
                 <Dialog.Title
                   as="h1"
-                  className="text-2xl font-bold leading-6 pt-6 text-slate-800 capitalize"
+                  className="font-bold leading-6 text-slate-800 capitalize w-full pr-8"
                 >
                   {name}
                 </Dialog.Title>
-                <div className="my-2 flex flex-col lg:flex-row items-center justify-center">
+                </div>
+                <div className="my-2 flex flex-col items-center justify-center">
                   <div className="w-full flex flex-col justify-center items-center">
                     <img
-                      src={`https://img.pokemondb.net/sprites/home/normal/2x/${name}.jpg`}
-                      // src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`}
+                      src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${pokemonId}.png`}
                       onError={addDefaultSrc}
                       alt={name}
                       loading="lazy"
-                      className="w-full object-cover max-w-xs"
+                      className="w-full object-cover max-w-[250px]"
                     />
                     <div className="flex justify-center">
                       {types.map((item) => {
@@ -65,18 +70,18 @@ export const Modal: React.FC<Props> = ({
                     <p
                       className="text-xl"
                       style={{
-                        color: pokemonTypes[mainType as PokemonType],
+                        color: pokemonMainTypeColor,
                       }}
                     >
                       About
                     </p>
                     <div className="flex justify-between text-xs w-5/6 max-w-sm h-16 py-2">
-                      <div className="flex flex-col justify-between">
+                      <div className="flex flex-col justify-center">
                         <div className="flex items-center">
                           <img
                             src="images/straighten.png"
                             alt="weight icon"
-                            className="w-6"
+                            className="w-6 h-5"
                           />
                           {`${height / 10} m`}
                         </div>
@@ -85,7 +90,7 @@ export const Modal: React.FC<Props> = ({
                       <div className="relative">
                         <div className="absolute left-1/2 -ml-0.5 w-0.5 h-full bg-slate-300"></div>
                       </div>
-                      <div className="flex flex-col justify-between">
+                      <div className="flex flex-col justify-center">
                         <p>{mainMove}</p>
                         <div className="text-slate-500 text-xs">
                           Total Moves: {moves.length}
@@ -94,7 +99,7 @@ export const Modal: React.FC<Props> = ({
                       <div className="relative">
                         <div className="absolute left-1/2 -ml-0.5 w-0.5 h-full bg-slate-300"></div>
                       </div>
-                      <div className="flex flex-col justify-between">
+                      <div className="flex flex-col justify-center">
                         <div className="flex items-center">
                           <img
                             src="images/weight.png"
@@ -114,22 +119,13 @@ export const Modal: React.FC<Props> = ({
                     <p
                       className="text-xl"
                       style={{
-                        color: pokemonTypes[mainType as PokemonType],
+                        color: pokemonMainTypeColor,
                       }}
                     >
                       Base Stats
                     </p>
-                    <PokemonStatsChart stats={stats} />
+                    <PokemonStatsChart stats={stats} color={pokemonMainTypeColor} />
                   </div>
-                </div>
-                <div className="my-4">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-red-400 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 focus:outline-none"
-                    onClick={closeModal}
-                  >
-                    Close
-                  </button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>
