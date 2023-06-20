@@ -52,7 +52,7 @@ export const PokemonList: React.FC<Props> = ({ list }) => {
           pageLinkClassName="flex items-center justify-center p-1 m-1 h-8 w-10 rounded border border-red-600 text-white bg-red-600 text-lg"
           previousClassName="flex items-center justify-center p-1 m-1 h-8 w-10 rounded border border-red-600 text-white bg-red-600 text-lg"
           nextLinkClassName="flex items-center justify-center p-1 m-1 h-8 w-10 rounded border border-red-600 text-white bg-red-600 text-lg"
-          activeLinkClassName="bg-juicy-red text-xl"
+          activeLinkClassName="bg-white text-red-600"
         />
       )}
     </>

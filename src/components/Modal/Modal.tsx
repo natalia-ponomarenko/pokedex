@@ -26,7 +26,6 @@ export const Modal: React.FC<Props> = ({
 }) => {
   const { name, stats, types, height, weight, moves } = pokemon;
   const mainType = types[0].type.name;
-  const mainMove = moves[0].move.name;
   const pokemonMainTypeColor = pokemonTypes[mainType as PokemonType];
 
   return (
@@ -41,13 +40,16 @@ export const Modal: React.FC<Props> = ({
             <Transition.Child as={Fragment} {...modalTransitionStyles}>
               <Dialog.Panel className="w-full md:max-w-md box-border p-4 transform overflow-hidden rounded-2xl bg-white text-center align-middle shadow-xl transition-all font-poppins">
                 <div className="flex items-center py-4 text-2xl">
-                  <i className="fa-solid fa-arrow-left p-1" onClick={closeModal}></i>
-                <Dialog.Title
-                  as="h1"
-                  className="font-bold leading-6 text-slate-800 capitalize w-full pr-8"
-                >
-                  {name}
-                </Dialog.Title>
+                  <i
+                    className="fa-solid fa-arrow-left p-1"
+                    onClick={closeModal}
+                  ></i>
+                  <Dialog.Title
+                    as="h1"
+                    className="font-bold leading-6 text-slate-800 capitalize w-full pr-8"
+                  >
+                    {name}
+                  </Dialog.Title>
                 </div>
                 <div className="my-2 flex flex-col items-center justify-center">
                   <div className="w-full flex flex-col justify-center items-center">
@@ -91,9 +93,10 @@ export const Modal: React.FC<Props> = ({
                         <div className="absolute left-1/2 -ml-0.5 w-0.5 h-full bg-slate-300"></div>
                       </div>
                       <div className="flex flex-col justify-center">
-                        <p>{mainMove}</p>
-                        <div className="text-slate-500 text-xs">
-                          Total Moves: {moves.length}
+                        <div className="text-slate-500 text-xs pt-1">
+                          <i className="fa-solid fa-bolt pr-1 text-black"></i>
+                          Total Moves:{" "}
+                          <span className="text-black">{moves.length}</span>
                         </div>
                       </div>
                       <div className="relative">
@@ -124,7 +127,10 @@ export const Modal: React.FC<Props> = ({
                     >
                       Base Stats
                     </p>
-                    <PokemonStatsChart stats={stats} color={pokemonMainTypeColor} />
+                    <PokemonStatsChart
+                      stats={stats}
+                      color={pokemonMainTypeColor}
+                    />
                   </div>
                 </div>
               </Dialog.Panel>

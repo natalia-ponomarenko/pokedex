@@ -53,17 +53,17 @@ export const Home: React.FC = () => {
 
   return (
     <div className="text-slate-800 lg:max-w-[1450px] mx-auto">
-      <button
-        className="w-32 bg-red-600 p-2 text-white rounded mt-2 mx-2 flex justify-center items-center "
-        onClick={() => setIsShowing((isShowing) => !isShowing)}
-      >
-        <img src='images/pokeball_small.png' alt='pokeball icon' className="w-4 h-4 mr-2"/>
-        Types
-      </button>
+
       <Transition show={isShowing} {...dropDownTransitionClasses}>
         <TypesList setFilter={setFilter} />
       </Transition>
       <div className="flex justify-center px-2 mt-4">
+      <button
+        className="px-2.5 py-2 mb-1 text-white mr-1 rounded transition ease-in-out delay-100 bg-red-600 hover:bg-juicy-red"
+        onClick={() => setIsShowing((isShowing) => !isShowing)}
+      >
+        <i className="fa-solid fa-star"></i>
+      </button>
         <div className="mr-2">
           <ReturnButton handleAction={resetFiltersAndRetrieveList} />
         </div>

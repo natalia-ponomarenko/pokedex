@@ -28,7 +28,7 @@ export const Search: React.FC<Props> = ({ setQuery, setLoading }) => {
       <input
         type="text"
         id="search-query"
-        className="block box-border p-2.5 w-72 z-1 text-sm rounded-lg transition ease-in-out delay-100 focus:outline-none focus:ring-1 focus:ring-juicy-red border border-[#CCCCCC]"
+        className="block box-border p-2.5 w-60 z-1 text-sm rounded-lg transition ease-in-out delay-100 focus:outline-none focus:ring-1 focus:ring-juicy-red border border-[#CCCCCC]"
         placeholder="Find a pokemon"
         value={value}
         onChange={handleInputValue}
