@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .pagination-element {
+    @apply flex items-center justify-center p-1 m-1 h-8 w-10 rounded border border-red-600 text-white bg-red-600 text-lg;
+  }
+}
+
 html {
   background-color: #F5F5F4;
 }

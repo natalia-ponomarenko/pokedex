@@ -25,7 +25,7 @@ export const Modal: React.FC<Props> = ({
   pokemonId,
 }) => {
   const { name, stats, types, height, weight, moves } = pokemon;
-  const mainType = types[0].type.name;
+  const mainType = types ? types[0].type.name : 'unknown';
   const pokemonMainTypeColor = pokemonTypes[mainType as PokemonType];
 
   return (
@@ -61,7 +61,7 @@ export const Modal: React.FC<Props> = ({
                       className="w-full object-cover max-w-[250px]"
                     />
                     <div className="flex justify-center">
-                      {types.map((item) => {
+                      {types?.map((item) => {
                         const {
                           type: { name },
                           slot,
@@ -70,14 +70,14 @@ export const Modal: React.FC<Props> = ({
                       })}
                     </div>
                     <p
-                      className="text-xl"
+                      className="text-xl pt-2"
                       style={{
                         color: pokemonMainTypeColor,
                       }}
                     >
                       About
                     </p>
-                    <div className="flex justify-between text-xs w-5/6 max-w-sm h-16 py-2">
+                    <div className="flex justify-between text-xs w-5/6 max-w-sm h-16">
                       <div className="flex flex-col justify-center">
                         <div className="flex items-center">
                           <img
@@ -109,7 +109,7 @@ export const Modal: React.FC<Props> = ({
                             alt="weight icon"
                             className="w-6 h-5"
                           />
-                          {`${weight / 100} kg`}
+                          {`${weight / 10} kg`}
                         </div>
                         <div className="text-slate-500 text-xs">Weight:</div>
                         <div className="relative">

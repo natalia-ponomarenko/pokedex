@@ -11,8 +11,9 @@ export const Header = () => {
           </span>
         </div>
         <div className="flex">
-          <Link to={`/collection`} className="flex items-center justify-center">
-          <i className="fa-solid fa-heart text-white text-2xl"></i>
+          <Link to={`/collection`} className="flex flex-col items-center justify-center text-white">
+          <p className=" text-lg hidden md:block">See caught</p>
+          <i className="fa-solid fa-heart text-2xl"></i>
           </Link>
         </div>
       </div>

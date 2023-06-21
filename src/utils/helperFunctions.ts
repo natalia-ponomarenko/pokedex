@@ -34,3 +34,10 @@ export const convertPokemonId = (number: number) => {
 
   return paddedString;
 };
+
+export const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+};

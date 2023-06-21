@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { CollectionContext } from "../../components/CollectionProvider";
 import { PokemonList } from "../../components/PokemonList";
 import { Link } from "react-router-dom";
-import { ReturnButton } from "../../components/ReturnButton";
+import { ReturnButton } from "../../components/buttons/ReturnButton";
 
 export const Collection: React.FC = () => {
   const context = useContext(CollectionContext);

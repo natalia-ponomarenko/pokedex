@@ -18,7 +18,7 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
   const { collection, setCollection } = context;
 
   const { name, types, id } = pokemon;
-  const mainType = types[0].type.name;
+  const mainType = types && types.length > 0 ? types[0].type.name : 'unknown';
 
   const styles = useSpring({
     from: { opacity: 0, transform: "translateY(-10px)" },
@@ -66,7 +66,7 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
 
   return (
     <animated.div style={styles}>
-      <div className="flex flex-col m-4 font-semibold font-poppins">
+      <div className="flex flex-col m-4 font-semibold">
         <div
           className={`flex flex-col w-60 h-72 shadow-md bg-white rounded-lg text-sm cursor-pointer relative`}
           onClick={() => setOpen(true)}

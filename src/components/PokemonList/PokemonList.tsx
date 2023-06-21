@@ -3,6 +3,8 @@ import { Pokemon } from "../../types/Pokemon";
 import { Card } from "../Card";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
+import { ScrollToTopButton } from "../buttons/ScrollButton";
+import { scrollToTop } from "../../utils/helperFunctions";
 
 type Props = {
   list: Pokemon[] | undefined;
@@ -26,6 +28,7 @@ export const PokemonList: React.FC<Props> = ({ list }) => {
     if (list) {
       const newOffset = (event.selected * itemsPerPage) % list.length;
       setItemOffset(newOffset);
+      scrollToTop();
     }
   };
 
@@ -33,7 +36,7 @@ export const PokemonList: React.FC<Props> = ({ list }) => {
 
   return (
     <>
-      <div className="flex flex-wrap justify-center py-2 will-change-transform scroll-container">
+      <div className="flex flex-wrap justify-center py-2 will-change-transform">
         {currentItems.map((pokemon: Pokemon) => (
           <Card key={pokemon.name} pokemon={pokemon} />
         ))}
@@ -49,12 +52,13 @@ export const PokemonList: React.FC<Props> = ({ list }) => {
           previousLabel="<"
           renderOnZeroPageCount={null}
           containerClassName="flex justify-between"
-          pageLinkClassName="flex items-center justify-center p-1 m-1 h-8 w-10 rounded border border-red-600 text-white bg-red-600 text-lg"
-          previousClassName="flex items-center justify-center p-1 m-1 h-8 w-10 rounded border border-red-600 text-white bg-red-600 text-lg"
-          nextLinkClassName="flex items-center justify-center p-1 m-1 h-8 w-10 rounded border border-red-600 text-white bg-red-600 text-lg"
-          activeLinkClassName="bg-white text-red-600"
+          pageLinkClassName="pagination-element"
+          previousClassName="pagination-element"
+          nextLinkClassName="pagination-element"
+          activeLinkClassName="bg-white text-juicy-red"
         />
       )}
+      <ScrollToTopButton />
     </>
   );
 };
