@@ -36,10 +36,11 @@ export const PokemonList: React.FC<Props> = ({ list }) => {
 
   return (
     <>
-      <div className="flex flex-wrap justify-center py-2 will-change-transform">
+      <div className="flex flex-wrap justify-center py-2 will-change-transform relative">
         {currentItems.map((pokemon: Pokemon) => (
           <Card key={pokemon.name} pokemon={pokemon} />
         ))}
+          <ScrollToTopButton />
       </div>
       {shouldRenderPagination && (
         <ReactPaginate
@@ -58,7 +59,6 @@ export const PokemonList: React.FC<Props> = ({ list }) => {
           activeLinkClassName="bg-white text-juicy-red"
         />
       )}
-      <ScrollToTopButton />
     </>
   );
 };

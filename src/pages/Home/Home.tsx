@@ -73,7 +73,7 @@ export const Home: React.FC = () => {
         <Search setQuery={setQuery} setLoading={setLoading} />
       </div>
 
-      <div className="flex flex-col mx-9 my-4 justify-center items-center relative">
+      <div className="main-container">
         {isLoadingInProgress && !error ? (
           <Loader />
         ) : (

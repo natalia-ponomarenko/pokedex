@@ -9,7 +9,7 @@ export const Collection: React.FC = () => {
   const { collection } = context;
 
   return (
-    <div className="text-center">
+    <div className="main-container">
       <div className="m-2">
         <Link to="/">
           <ReturnButton />
