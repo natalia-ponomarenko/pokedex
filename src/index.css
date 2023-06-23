@@ -1,3 +1,4 @@
+@import './styles/normalize.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,29 +11,80 @@
   .main-container {
     @apply flex flex-col mx-9 my-4 justify-center items-center
   }
-}
 
-html {
-  background-color: #F5F5F4;
-}
+  .input {
+    @apply block box-border p-2.5 w-60 text-sm rounded-lg transition ease-in-out delay-100 focus:outline-none focus:ring-1 focus:ring-juicy-red border border-[#CCCCCC]
+  }
 
-body {
-  overflow-y: scroll;
-}
+  .input_button {
+    @apply absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-red-600 transition ease-in-out delay-100 rounded-r-lg border border-red-600 hover:bg-juicy-red
+  }
 
-::-webkit-scrollbar {
-  width: 3px;
-}
+  .navigation_button {
+    @apply text-white text-center rounded-lg bg-red-600 transition ease-in-out delay-100 hover:bg-juicy-red py-2
+  }
 
-::-webkit-scrollbar-thumb {
-  background-color: rgba(94, 88, 88, 0.3);
-  border-radius: 4px;
-}
+  .type_button {
+    @apply py-1 m-1 w-16 rounded text-sm font-semibold text-white ring-transparent
+  }
 
-::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0.1);
-}
+  .type_item {
+    @apply py-1 m-1 w-16 rounded text-sm font-semibold text-white text-center
+  }
 
-::-webkit-scrollbar-corner {
-  background-color: transparent;
+  .header {
+    @apply bg-red-600 py-2 md:py-5 px-5 flex justify-between font-poppins
+  }
+
+  .header_text {
+    @apply text-3xl md:text-5xl font-bold text-white
+  }
+
+  .stats_modal {
+    @apply absolute left-1/2 -ml-0.5 w-0.5 h-full bg-slate-300
+  }
+
+  .card {
+    @apply flex flex-col w-60 h-72 shadow-md bg-white rounded-lg text-sm cursor-pointer relative
+  }
+
+  .card_name {
+    @apply text-lg text-white text-center font-bold capitalize
+  }
+
+  .collected_image {
+    @apply h-8 transition ease-in-out delay-300
+  }
+
+  .flex-center {
+    @apply flex items-center justify-center
+  }
+
+  .flex-column-centered {
+    @apply flex flex-col justify-center
+  }
+
+  .small_header {
+    @apply text-slate-500 text-xs
+  }
+
+  .modal_panel {
+    @apply w-full md:max-w-md box-border p-4 transform rounded-2xl bg-white text-center align-middle shadow-xl transition-all font-poppins
+  }
+
+  .modal_background {
+    @apply fixed inset-0 bg-black bg-opacity-70
+  }
+
+  .modal_name {
+    @apply font-bold leading-6 text-slate-800 capitalize w-full pr-8
+  }
+
+  .modal_main_stats {
+    @apply flex justify-between text-xs w-5/6 max-w-sm h-16
+  }
+
+  .list_container {
+    @apply flex flex-wrap justify-center py-2 will-change-transform relative
+  }
 }

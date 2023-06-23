@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 import { Icon } from "../Icon";
+import { getPokemon } from "../../api/pokemon";
+import { Pokemon } from "../../types/Pokemon";
+import { BASE_URL } from "../../utils/constants";
 
 type Props = {
-  setQuery: (query: string) => void;
-  setLoading: (loading: boolean) => void;
+  setPokemon: (pokemon: Pokemon | null) => void;
+  setPokemonLoading: (loading: boolean) => void;
+  setPokemonError: (error: boolean) => void;
 };
 
-export const Search: React.FC<Props> = ({ setQuery, setLoading }) => {
+export const Search: React.FC<Props> = ({
+  setPokemon,
+  setPokemonLoading,
+  setPokemonError,
+}) => {
   const [value, setValue] = useState("");
 
   const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,13 +22,27 @@ export const Search: React.FC<Props> = ({ setQuery, setLoading }) => {
     setValue(value);
   };
 
+  const fetchPokemon = async (name: string) => {
+    const lowerCasedRequest = name.toLowerCase();
+    
+    setPokemonLoading(true);
+    setPokemonError(false);
+    try {
+      const pokemon = await getPokemon(
+        `${BASE_URL}${lowerCasedRequest}`
+      );
+      setPokemon(pokemon);
+    } catch {
+      setPokemonError(true);
+      setPokemon(null);
+    } finally {
+      setPokemonLoading(false);
+    }
+  };
+
   const handleButtonClick = () => {
-    setQuery(value);
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setValue("");
-    }, 1000);
+    fetchPokemon(value);
+    setValue("");
   };
 
   return (
@@ -28,14 +50,14 @@ export const Search: React.FC<Props> = ({ setQuery, setLoading }) => {
       <input
         type="text"
         id="search-query"
-        className="block box-border p-2.5 w-60 z-1 text-sm rounded-lg transition ease-in-out delay-100 focus:outline-none focus:ring-1 focus:ring-juicy-red border border-[#CCCCCC]"
+        className="input"
         placeholder="Find a pokemon"
         value={value}
         onChange={handleInputValue}
       />
       <button
         type="submit"
-        className="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-red-600 transition ease-in-out delay-100 rounded-r-lg border border-red-600 hover:bg-juicy-red"
+        className="input_button"
         onClick={handleButtonClick}
         disabled={!value.length}
       >

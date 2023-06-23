@@ -12,6 +12,11 @@ export const getPokemonsByType = (
   url: string
 ): Promise<PokemonsByTypeApiResponse> => request(url);
 
+export const getPokemon = (url: string): Promise<Pokemon> => request(url);
+
+export const getPokemonTypes = (): Promise<PokemonTypeApiResponse> =>
+  request(TYPE_URL);
+
 export const getPokemonDetails = async (
   data: PokemonApiResponse | PokemonsByTypeApiResponse
 ): Promise<Pokemon[]> => {
@@ -35,6 +40,3 @@ export const getPokemonDetails = async (
 
   return pokemonList;
 };
-
-export const getPokemonTypes = (): Promise<PokemonTypeApiResponse> =>
-  request(TYPE_URL);

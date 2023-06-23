@@ -1,0 +1,15 @@
+html {
+  background-color: #F5F5F4;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+body {
+  min-height: 100vh;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}

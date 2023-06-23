@@ -1,6 +1,7 @@
-import { pokemonTypes } from "../../../utils/constants";
+import { POKEMON_TYPES } from "../../../utils/constants";
 import { PokemonType } from "../../../types/PokemonTypes";
 import { useState } from "react";
+import classnames from "classnames";
 
 type Props = {
   name: string;
@@ -19,11 +20,12 @@ export const TypeButton: React.FC<Props> = ({ name, setFilter }) => {
         setFilter(name);
       }}
       style={{
-        backgroundColor: pokemonTypes[name as PokemonType],
+        backgroundColor: POKEMON_TYPES[name as PokemonType],
       }}
-      className={`py-1 m-1 w-16 rounded text-sm font-semibold text-white ring-transparent ${
-        active === name ? "focus: ring-2 focus:ring-juicy-red" : ""
-      }`}
+      className={classnames("type_button", {
+        "focus:ring-2": active === name,
+        "focus:ring-juicy-red": active === name,
+      })}
     >
       {name}
     </button>

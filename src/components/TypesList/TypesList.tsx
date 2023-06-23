@@ -18,7 +18,7 @@ export const TypesList: React.FC<Props> = ({ setFilter }) => {
       {isLoading && <p>Loading types...</p>}
       {isError && <Error text="Ooops! Types weren't fetched" />}
       {data && (
-        <div className="flex flex-wrap justify-center items-center">
+        <div className="flex-center flex-wrap">
           {data.results.map((type) => (
             <TypeButton
               key={type.name}

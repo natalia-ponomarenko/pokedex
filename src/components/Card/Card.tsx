@@ -4,8 +4,9 @@ import { Modal } from "../Modal/Modal";
 import { addDefaultSrc, convertPokemonId } from "../../utils/helperFunctions";
 import { CollectionContext } from "../CollectionProvider";
 import { useSpring, animated } from "react-spring";
-import { pokemonTypes } from "../../utils/constants";
+import { POKEMON_IMAGE_URL, POKEMON_TYPES } from "../../utils/constants";
 import { PokemonType } from "../../types/PokemonTypes";
+import classnames from "classnames";
 
 type Props = {
   pokemon: Pokemon;
@@ -18,7 +19,7 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
   const { collection, setCollection } = context;
 
   const { name, types, id } = pokemon;
-  const mainType = types && types.length > 0 ? types[0].type.name : 'unknown';
+  const mainType = types && types.length > 0 ? types[0].type.name : "unknown";
 
   const styles = useSpring({
     from: { opacity: 0, transform: "translateY(-10px)" },
@@ -67,26 +68,31 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
   return (
     <animated.div style={styles}>
       <div className="flex flex-col m-4 font-semibold">
-        <div
-          className={`flex flex-col w-60 h-72 shadow-md bg-white rounded-lg text-sm cursor-pointer relative`}
-          onClick={() => setOpen(true)}
-        >
+        <div className="card" onClick={() => setOpen(true)}>
           <div className="h-16 py-4 px-4 flex justify-between">
             <button onClick={(e) => handleButtonClick(e, pokemon)}>
               <img
-                className={`${
-                  isCollected ? "opacity-0" : ""
-                } h-8 transition ease-in-out delay-300`}
+                className={classnames(
+                  {
+                    "opacity-0": isCollected,
+                  },
+                  "collected_image"
+                )}
                 src="images/pokeball_open.png"
-                alt="pikachu"
+                alt="pokeball open"
                 loading="lazy"
               />
               <img
-                className={`${
-                  isCollected ? "" : "opacity-0"
-                } h-8 transition ease-in-out delay-300 relative bottom-8`}
+                className={classnames(
+                  {
+                    "opacity-0": !isCollected,
+                  },
+                  "collected_image",
+                  "relative",
+                  "bottom-8"
+                )}
                 src="images/pokeball_small.png"
-                alt="pokeball"
+                alt="pokeball closed"
                 loading="lazy"
               />
             </button>
@@ -98,7 +104,7 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
               <img src="images/pokeball_background.png" alt="pokeball white" />
             </div>
             <img
-              src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${convertedPokemonId}.png`}
+              src={`${POKEMON_IMAGE_URL}${convertedPokemonId}.png`}
               onError={addDefaultSrc}
               alt={name}
               loading="lazy"
@@ -107,11 +113,11 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
           </div>
           <div
             style={{
-              backgroundColor: pokemonTypes[mainType as PokemonType],
+              backgroundColor: POKEMON_TYPES[mainType as PokemonType],
             }}
             className="w-full rounded-lg py-2 absolute bottom-0"
           >
-            <p className="text-lg text-white text-center font-600 capitalize">
+            <p className="card_name">
               {name}
             </p>
           </div>

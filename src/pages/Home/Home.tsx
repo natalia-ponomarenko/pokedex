@@ -4,23 +4,23 @@ import { Search } from "../../components/Search";
 import { Loader } from "../../components/Loader";
 import { PokemonList } from "../../components/PokemonList";
 import { Error } from "../../components/Error";
-import { filterByQuery } from "../../utils/helperFunctions";
-import { ReturnButton } from "../../components/buttons/ReturnButton";
 import { TypesList } from "../../components/TypesList";
 import {
   TYPE_URL,
   URL_ALL_POKEMONS,
-  dropDownTransitionClasses,
+  DROPDOWN_TRANSITION,
 } from "../../utils/constants";
 import { Pokemon } from "../../types/Pokemon";
 import { usePokemonQuery } from "../../hooks/usePokemonQuery";
 import { Transition } from "@headlessui/react";
+import { NavigationButton } from "../../components/buttons/NavigationButton";
 
 export const Home: React.FC = () => {
-  const [query, setQuery] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isPokemonLoading, setPokemonLoading] = useState<boolean>(false);
+  const [isPokemonError, setPokemonError] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>("");
   const [isShowing, setIsShowing] = useState<boolean>(false);
+  const [pokemon, setPokemon] = useState<Pokemon | null>(null);
 
   const {
     isLoading,
@@ -29,7 +29,7 @@ export const Home: React.FC = () => {
   } = usePokemonQuery(["pokemons"], () => getPokemons(URL_ALL_POKEMONS));
 
   const {
-    isLoading: areTypeLoading,
+    isLoading: areTypesLoading,
     isError: isTypeError,
     data: typeData,
   } = usePokemonQuery(["pokemonsByType", filter], () =>
@@ -42,46 +42,62 @@ export const Home: React.FC = () => {
 
   useEffect(() => {
     setFilteredPokemonList(typeData);
+    setPokemon(null);
+    setPokemonError(false);
   }, [filter, typeData]);
 
   useEffect(() => {
-    setFilteredPokemonList(filterByQuery(query, pokemonList));
-  }, [query, pokemonList]);
-
-  const resetFiltersAndRetrieveList = useCallback(() => {
     setFilteredPokemonList(pokemonList);
   }, [pokemonList]);
 
-  const isLoadingInProgress = isLoading || loading || areTypeLoading;
+  const resetFiltersAndRetrieveList = useCallback(() => {
+    setFilteredPokemonList(pokemonList);
+    setPokemon(null);
+    setPokemonError(false);
+  }, [pokemonList]);
+
+  const isLoadingInProgress = isLoading || areTypesLoading || isPokemonLoading;
   const error = isError || isTypeError;
 
   return (
     <div className="text-slate-800 lg:max-w-[1450px] mx-auto font-poppins">
-      <Transition show={isShowing} {...dropDownTransitionClasses}>
+      <Transition show={isShowing} {...DROPDOWN_TRANSITION}>
         <TypesList setFilter={setFilter} />
       </Transition>
       <div className="flex justify-center px-2 mt-4">
-        <button
-          className="px-2.5 py-2 mb-1 text-white mr-1 rounded transition ease-in-out delay-100 bg-red-600 hover:bg-juicy-red"
-          onClick={() => setIsShowing((isShowing) => !isShowing)}
-        >
-          <i className="fa-solid fa-star"></i>
-        </button>
+        <NavigationButton
+          title="Filter by type"
+          iconClassName="fa-star"
+          className="navigation_button px-2.5 mb-1 mr-1"
+          handleAction={() => setIsShowing((isShowing) => !isShowing)}
+        />
         <div className="mr-2">
-          <ReturnButton handleAction={resetFiltersAndRetrieveList} />
+          <NavigationButton
+            className="px-2.5 navigation_button"
+            iconClassName="fa-house"
+            title="Return to the main list"
+            handleAction={resetFiltersAndRetrieveList}
+          />
         </div>
-        <Search setQuery={setQuery} setLoading={setLoading} />
+        <Search
+          setPokemon={setPokemon}
+          setPokemonLoading={setPokemonLoading}
+          setPokemonError={setPokemonError}
+        />
       </div>
 
       <div className="main-container">
-        {isLoadingInProgress && !error ? (
+        {pokemon ? (
+          <PokemonList list={[pokemon]} />
+        ) : isLoadingInProgress && !error ? (
           <Loader />
+        ) : error ? (
+          <Error text="Something went wrong" />
+        ) : (filteredPokemonList?.length === 0 && !isLoadingInProgress) ||
+          isPokemonError ? (
+          <Error text="Apologies, but what you're looking for could not be found" />
         ) : (
           <PokemonList list={filteredPokemonList} />
-        )}
-        {error && <Error text="Ooops! Something went wrong..." />}
-        {filteredPokemonList?.length === 0 && !isLoadingInProgress && (
-          <Error text="Apologies, but what you're looking for could not be found" />
         )}
       </div>
     </div>

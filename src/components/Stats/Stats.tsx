@@ -44,15 +44,24 @@ export const PokemonStatsChart: React.FC<Props> = ({ stats, color }) => {
     maintainAspectRatio: false,
     scales: {
       x: {
-        beginAtZero: true,
+        border: {
+          display: false
+        },
         grid: {
           display: false,
+          color: 'transparent',
         },
+        ticks: {
+          display: false,
+        }
       },
       y: {
-        beginAtZero: true,
+        border: {
+          display: false
+        },
         grid: {
           display: false,
+          color: 'transparent',
         },
         ticks: {
           font: {
@@ -69,7 +78,7 @@ export const PokemonStatsChart: React.FC<Props> = ({ stats, color }) => {
     <div className="w-full h-full">
       <Bar
         width={"100%"}
-        height={"230px"}
+        height={"200px"}
         data={chartData}
         options={chartOptions}
       />

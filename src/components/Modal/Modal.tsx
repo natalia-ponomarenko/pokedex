@@ -1,15 +1,16 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { addDefaultSrc } from "../../utils/helperFunctions";
 import { PokemonStatsChart } from "../Stats";
 import { Pokemon } from "../../types/Pokemon";
-import { TypeItem } from "../TypeItem";
 import {
-  modalBgTransitionStyles,
-  modalTransitionStyles,
-  pokemonTypes,
+  MODAL_BACKGROUND_TRANSITION,
+  MODAL_TRANSITION,
+  POKEMON_IMAGE_URL,
+  POKEMON_TYPES,
 } from "../../utils/constants";
 import { PokemonType } from "../../types/PokemonTypes";
+import { TypeItemsList } from "../TypeItemsList";
 
 type Props = {
   isModalOpen: boolean;
@@ -25,49 +26,57 @@ export const Modal: React.FC<Props> = ({
   pokemonId,
 }) => {
   const { name, stats, types, height, weight, moves } = pokemon;
-  const mainType = types ? types[0].type.name : 'unknown';
-  const pokemonMainTypeColor = pokemonTypes[mainType as PokemonType];
+  const mainType = types ? types[0].type.name : "unknown";
+  const pokemonMainTypeColor = POKEMON_TYPES[mainType as PokemonType];
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      const modalPanel = document.querySelector(".modal-panel");
+      if (modalPanel && !modalPanel.contains(event.target as Node)) {
+        closeModal();
+      }
+    };
+
+    if (isModalOpen) {
+      document.addEventListener("click", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, [isModalOpen, closeModal]);
 
   return (
     <Transition appear show={isModalOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
-        <Transition.Child as={Fragment} {...modalBgTransitionStyles}>
-          <div className="fixed inset-0 bg-black bg-opacity-70" />
+        <Transition.Child as={Fragment} {...MODAL_BACKGROUND_TRANSITION}>
+          <div className="modal_background" />
         </Transition.Child>
 
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center">
-            <Transition.Child as={Fragment} {...modalTransitionStyles}>
-              <Dialog.Panel className="w-full md:max-w-md box-border p-4 transform overflow-hidden rounded-2xl bg-white text-center align-middle shadow-xl transition-all font-poppins">
-                <div className="flex items-center py-4 text-2xl">
+        <div className="fixed inset-0">
+          <div className="flex-center min-h-full p-4 text-center">
+            <Transition.Child as={Fragment} {...MODAL_TRANSITION}>
+              <Dialog.Panel className="modal_panel modal-panel">
+                <div className="flex items-center py-2 text-2xl">
                   <i
                     className="fa-solid fa-arrow-left p-1"
                     onClick={closeModal}
                   ></i>
-                  <Dialog.Title
-                    as="h1"
-                    className="font-bold leading-6 text-slate-800 capitalize w-full pr-8"
-                  >
+                  <Dialog.Title as="h1" className="modal_name">
                     {name}
                   </Dialog.Title>
                 </div>
-                <div className="my-2 flex flex-col items-center justify-center">
-                  <div className="w-full flex flex-col justify-center items-center">
+                <div className="my-2 flex-center flex-col">
+                  <div className="w-full flex-center flex-col">
                     <img
-                      src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${pokemonId}.png`}
+                      src={`${POKEMON_IMAGE_URL}${pokemonId}.png`}
                       onError={addDefaultSrc}
                       alt={name}
                       loading="lazy"
-                      className="w-full object-cover max-w-[250px]"
+                      className="w-full object-cover max-w-[200px]"
                     />
                     <div className="flex justify-center">
-                      {types?.map((item) => {
-                        const {
-                          type: { name },
-                          slot,
-                        } = item;
-                        return <TypeItem key={slot} name={name} />;
-                      })}
+                      <TypeItemsList types={types} />
                     </div>
                     <p
                       className="text-xl pt-2"
@@ -77,8 +86,8 @@ export const Modal: React.FC<Props> = ({
                     >
                       About
                     </p>
-                    <div className="flex justify-between text-xs w-5/6 max-w-sm h-16">
-                      <div className="flex flex-col justify-center">
+                    <div className="modal_main_stats">
+                      <div className="flex-column-centered">
                         <div className="flex items-center">
                           <img
                             src="images/straighten.png"
@@ -87,22 +96,22 @@ export const Modal: React.FC<Props> = ({
                           />
                           {`${height / 10} m`}
                         </div>
-                        <div className="text-slate-500 text-xs">Height:</div>
+                        <div className="small_header">Height:</div>
                       </div>
                       <div className="relative">
-                        <div className="absolute left-1/2 -ml-0.5 w-0.5 h-full bg-slate-300"></div>
+                        <div className="stats_modal" />
                       </div>
-                      <div className="flex flex-col justify-center">
-                        <div className="text-slate-500 text-xs pt-1">
-                          <i className="fa-solid fa-bolt pr-1 text-black"></i>
+                      <div className="flex-column-centered">
+                        <div className="small_header pt-1">
+                          <i className="fa-solid fa-bolt pr-1 text-black" />
                           Total Moves:{" "}
                           <span className="text-black">{moves.length}</span>
                         </div>
                       </div>
                       <div className="relative">
-                        <div className="absolute left-1/2 -ml-0.5 w-0.5 h-full bg-slate-300"></div>
+                        <div className="stats_modal" />
                       </div>
-                      <div className="flex flex-col justify-center">
+                      <div className="flex-column-centered">
                         <div className="flex items-center">
                           <img
                             src="images/weight.png"
@@ -111,9 +120,9 @@ export const Modal: React.FC<Props> = ({
                           />
                           {`${weight / 10} kg`}
                         </div>
-                        <div className="text-slate-500 text-xs">Weight:</div>
+                        <div className="small_header">Weight:</div>
                         <div className="relative">
-                          <div className="absolute left-1/2 -ml-0.5 w-0.5 h-full bg-slate-300"></div>
+                          <div className="stats_modal" />
                         </div>
                       </div>
                     </div>

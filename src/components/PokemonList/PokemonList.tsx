@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { ScrollToTopButton } from "../buttons/ScrollButton";
 import { scrollToTop } from "../../utils/helperFunctions";
+import { CARDS_PER_PAGE } from "../../utils/constants";
 
 type Props = {
   list: Pokemon[] | undefined;
@@ -14,33 +15,33 @@ export const PokemonList: React.FC<Props> = ({ list }) => {
   const [currentItems, setCurrentItems] = useState<Pokemon[] | []>([]);
   const [pageCount, setPageCount] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
-  const itemsPerPage = 10;
+
 
   useEffect(() => {
     if (list) {
-      const endOffset = itemOffset + itemsPerPage;
+      const endOffset = itemOffset + CARDS_PER_PAGE;
       setCurrentItems(list.slice(itemOffset, endOffset));
-      setPageCount(Math.ceil(list.length / itemsPerPage));
+      setPageCount(Math.ceil(list.length / CARDS_PER_PAGE));
     }
-  }, [itemOffset, itemsPerPage, list]);
+  }, [itemOffset, list]);
 
   const handlePageClick = (event: { selected: number }) => {
     if (list) {
-      const newOffset = (event.selected * itemsPerPage) % list.length;
+      const newOffset = (event.selected * CARDS_PER_PAGE) % list.length;
       setItemOffset(newOffset);
       scrollToTop();
     }
   };
 
-  const shouldRenderPagination = list && list.length > itemsPerPage;
+  const shouldRenderPagination = list && list.length > CARDS_PER_PAGE;
 
   return (
     <>
-      <div className="flex flex-wrap justify-center py-2 will-change-transform relative">
+      <div className="list_container">
         {currentItems.map((pokemon: Pokemon) => (
           <Card key={pokemon.name} pokemon={pokemon} />
         ))}
-          <ScrollToTopButton />
+        <ScrollToTopButton />
       </div>
       {shouldRenderPagination && (
         <ReactPaginate

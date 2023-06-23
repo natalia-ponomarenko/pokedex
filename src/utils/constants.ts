@@ -1,12 +1,19 @@
 import { PokemonTypes } from "../types/PokemonTypes";
 
-const POKEMON_COUNT = 1000;
+const POKEMON_COUNT = 300;
 
-export const URL_ALL_POKEMONS = `https://pokeapi.co/api/v2/pokemon/?limit=${POKEMON_COUNT}`;
+export const BASE_URL = "https://pokeapi.co/api/v2/pokemon/";
+
+export const URL_ALL_POKEMONS = `${BASE_URL}?limit=${POKEMON_COUNT}`;
 
 export const TYPE_URL = "https://pokeapi.co/api/v2/type/";
 
-export const pokemonTypes: PokemonTypes = {
+export const POKEMON_IMAGE_URL =
+  "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/";
+
+export const CARDS_PER_PAGE = 10;
+
+export const POKEMON_TYPES: PokemonTypes = {
   normal: "#AAA67F",
   fire: "#EE8130",
   water: "#6493EB",
@@ -29,25 +36,25 @@ export const pokemonTypes: PokemonTypes = {
   shadow: "#9467B5",
 };
 
-export const dropDownTransitionClasses = {
-  enter: 'transition ease-out duration-300',
-  enterFrom: 'transform opacity-0 scale-95',
-  enterTo: 'transform opacity-100 scale-100',
-  leave: 'transition ease-in duration-75',
-  leaveFrom: 'transform opacity-100 scale-100',
-  leaveTo: 'transform opacity-0 scale-95',
+export const DROPDOWN_TRANSITION = {
+  enter: "transition ease-out duration-300",
+  enterFrom: "transform opacity-0 scale-95",
+  enterTo: "transform opacity-100 scale-100",
+  leave: "transition ease-in duration-75",
+  leaveFrom: "transform opacity-100 scale-100",
+  leaveTo: "transform opacity-0 scale-95",
 };
 
-export const modalBgTransitionStyles = {
+export const MODAL_BACKGROUND_TRANSITION = {
   enter: "ease-out duration-300",
-  enterFrom :"opacity-0",
-  enterTo:"opacity-100",
-  leave:"ease-in duration-200",
-  leaveFrom:"opacity-100",
-  leaveTo:"opacity-0",
+  enterFrom: "opacity-0",
+  enterTo: "opacity-100",
+  leave: "ease-in duration-200",
+  leaveFrom: "opacity-100",
+  leaveTo: "opacity-0",
 };
 
-export const modalTransitionStyles = {
+export const MODAL_TRANSITION = {
   enter: "ease-out duration-300",
   enterFrom: "opacity-0 scale-95",
   enterTo: "opacity-100 scale-100",
