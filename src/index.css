@@ -17,7 +17,7 @@
   }
 
   .input_button {
-    @apply absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-red-600 transition ease-in-out delay-100 rounded-r-lg border border-red-600 hover:bg-juicy-red
+    @apply absolute top-0 right-0 p-[10.8px] text-sm font-medium text-white bg-red-600 transition ease-in-out delay-100 rounded-r-lg hover:bg-juicy-red
   }
 
   .navigation_button {

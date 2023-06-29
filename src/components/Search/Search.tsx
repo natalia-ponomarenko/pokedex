@@ -23,10 +23,11 @@ export const Search: React.FC<Props> = ({
   };
 
   const fetchPokemon = async (name: string) => {
-    const lowerCasedRequest = name.toLowerCase();
-    
     setPokemonLoading(true);
     setPokemonError(false);
+
+    const lowerCasedRequest = name.toLowerCase();
+
     try {
       const pokemon = await getPokemon(
         `${BASE_URL}${lowerCasedRequest}`
@@ -36,7 +37,9 @@ export const Search: React.FC<Props> = ({
       setPokemonError(true);
       setPokemon(null);
     } finally {
-      setPokemonLoading(false);
+      setTimeout(() => {
+        setPokemonLoading(false);
+      }, 2000)
     }
   };
 

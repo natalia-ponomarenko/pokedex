@@ -34,27 +34,6 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
 
   const isCollected = collected(pokemon);
 
-  const addPokemon = useCallback(
-    (pokemon: Pokemon) => {
-      if (!isCollected) {
-        setCollection((prevCollection: Pokemon[]) => [
-          ...prevCollection,
-          pokemon,
-        ]);
-      }
-    },
-    [setCollection, isCollected]
-  );
-
-  const removePokemon = useCallback(
-    (name: string) => {
-      setCollection((prevCollection: Pokemon[]) =>
-        prevCollection.filter((pokemon: Pokemon) => pokemon.name !== name)
-      );
-    },
-    [setCollection]
-  );
-
   const handleButtonClick = (
     e: React.MouseEvent<HTMLButtonElement>,
     pokemon: Pokemon
@@ -62,6 +41,24 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
     e.stopPropagation();
     isCollected ? removePokemon(pokemon.name) : addPokemon(pokemon);
   };
+
+  const addPokemon = useCallback(
+    (pokemon: Pokemon) => {
+      if (!isCollected) {
+        setCollection([...collection, pokemon]);
+      }
+    },
+    [setCollection, isCollected, collection]
+  );
+
+  const removePokemon = useCallback(
+    (name: string) => {
+      setCollection(
+        collection.filter((pokemon: Pokemon) => pokemon.name !== name)
+      );
+    },
+    [setCollection, collection]
+  );
 
   const convertedPokemonId = convertPokemonId(id);
 
@@ -117,9 +114,7 @@ export const Card: React.FC<Props> = ({ pokemon }) => {
             }}
             className="w-full rounded-lg py-2 absolute bottom-0"
           >
-            <p className="card_name">
-              {name}
-            </p>
+            <p className="card_name">{name}</p>
           </div>
           <Modal
             isModalOpen={open}
