@@ -21,3 +21,4 @@ export type PokemonType =
   | "shadow";
 
   export type PokemonTypes = Record<PokemonType, string>;
+  

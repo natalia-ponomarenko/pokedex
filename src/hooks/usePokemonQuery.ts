@@ -17,9 +17,6 @@ export const usePokemonQuery = <
       const data = await fetchFunction();
       const pokemonDetails = await getPokemonDetails(data);
       return pokemonDetails;
-    },
-    {
-      staleTime: 60000,
     }
   );
 };

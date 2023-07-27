@@ -15,8 +15,7 @@ export const NavigationButton: React.FC<Props> = ({
     <button
       onClick={handleAction}
       className={className}
-      title={title}
-    >
+      title={title}>
       <i className={`fa-solid ${iconClassName}`} />
     </button>
   );

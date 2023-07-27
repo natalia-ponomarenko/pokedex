@@ -17,6 +17,16 @@ export const convertPokemonId = (number: number) => {
 export const scrollToTop = () => {
   window.scrollTo({
     top: 0,
-    behavior: 'smooth'
+    behavior: "smooth",
   });
+};
+
+export const updateURLParams = (name?: string) => {
+  const params = new URLSearchParams(window.location.search);
+
+  name
+    ? params.set('pokemon', name)
+    : params.delete('pokemon');
+
+  window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
 };

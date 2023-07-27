@@ -40,6 +40,9 @@ export const PokemonStatsChart: React.FC<Props> = ({ stats, color }) => {
       legend: {
         display: false,
       },
+      tooltip: {
+        enabled: false,
+      }
     },
     maintainAspectRatio: false,
     scales: {

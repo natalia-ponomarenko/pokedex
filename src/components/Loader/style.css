@@ -16,16 +16,6 @@
   );
 }
 
-.ball:after {
-  content: "";
-  position: absolute;
-  top: calc(50px - 1.5px);
-  left: 0;
-  width: 100px;
-  height: 3px;
-  background: #3f3f3f;
-}
-
 .ball:before {
   content: "";
   position: absolute;
@@ -39,6 +29,16 @@
   z-index: 1;
   box-shadow: 0 0 7.5px -1px #c62828 inset;
   animation: button 3s ease infinite;
+}
+
+.ball:after {
+  content: "";
+  position: absolute;
+  top: calc(50px - 1.5px);
+  left: 0;
+  width: 100px;
+  height: 3px;
+  background: #3f3f3f;
 }
 
 @keyframes roll {

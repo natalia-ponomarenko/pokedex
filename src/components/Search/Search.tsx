@@ -1,19 +1,18 @@
 import React, { useState } from "react";
-import { Icon } from "../Icon";
-import { getPokemon } from "../../api/pokemon";
+import { MagnifyingGlassIcon } from "../MagnifyingGlassIcon";
 import { Pokemon } from "../../types/Pokemon";
-import { BASE_URL } from "../../utils/constants";
+import { QueryObserverResult, RefetchOptions, RefetchQueryFilters } from "@tanstack/react-query";
 
 type Props = {
+  setSearchedValue: (value: string) => void;
+  refetch: <TPageData>(options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined) => Promise<QueryObserverResult<Pokemon | null, Error>>;
   setPokemon: (pokemon: Pokemon | null) => void;
-  setPokemonLoading: (loading: boolean) => void;
-  setPokemonError: (error: boolean) => void;
 };
 
 export const Search: React.FC<Props> = ({
+  setSearchedValue,
   setPokemon,
-  setPokemonLoading,
-  setPokemonError,
+  refetch,
 }) => {
   const [value, setValue] = useState("");
 
@@ -22,29 +21,10 @@ export const Search: React.FC<Props> = ({
     setValue(value);
   };
 
-  const fetchPokemon = async (name: string) => {
-    setPokemonLoading(true);
-    setPokemonError(false);
-
-    const lowerCasedRequest = name.toLowerCase();
-
-    try {
-      const pokemon = await getPokemon(
-        `${BASE_URL}${lowerCasedRequest}`
-      );
-      setPokemon(pokemon);
-    } catch {
-      setPokemonError(true);
-      setPokemon(null);
-    } finally {
-      setTimeout(() => {
-        setPokemonLoading(false);
-      }, 2000)
-    }
-  };
-
   const handleButtonClick = () => {
-    fetchPokemon(value);
+    setSearchedValue(value);
+    refetch();
+    setPokemon(null);
     setValue("");
   };
 
@@ -60,11 +40,11 @@ export const Search: React.FC<Props> = ({
       />
       <button
         type="submit"
-        className="input_button"
+        className="input-button"
         onClick={handleButtonClick}
         disabled={!value.length}
       >
-        <Icon />
+        <MagnifyingGlassIcon />
       </button>
     </div>
   );

@@ -1,5 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-import { getPokemonTypes } from "../../api/pokemon";
+import { usePokemonTypesQuery } from "../../hooks/usePokemonTypesQuery";
 import { Error } from "../Error";
 import { TypeButton } from "../buttons/TypeButton";
 
@@ -8,10 +7,7 @@ type Props = {
 };
 
 export const TypesList: React.FC<Props> = ({ setFilter }) => {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["types"],
-    queryFn: getPokemonTypes,
-  });
+  const { data, isLoading, isError } = usePokemonTypesQuery();
 
   return (
     <div className="flex my-4 mx-auto px-5 max-w-4xl">

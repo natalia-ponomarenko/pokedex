@@ -11,7 +11,7 @@ export const TypeItem: React.FC<Props> = ({ name }) => {
       style={{
         backgroundColor: POKEMON_TYPES[name as PokemonType],
       }}
-      className="type_item"
+      className="type-item"
     >
       {name}
     </div>

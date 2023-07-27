@@ -25,14 +25,13 @@ export const ScrollToTopButton = () => {
         "bottom-8",
         "-right-4",
         "px-4",
-        "navigation_button",
+        "navigation-button",
         {
           visible: isVisible,
           hidden: !isVisible,
         }
       )}
-      onClick={scrollToTop}
-    >
+      onClick={scrollToTop}>
       <i className="fa-solid fa-arrow-up" />
     </button>
   );

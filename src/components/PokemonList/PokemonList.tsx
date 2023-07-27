@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Pokemon } from "../../types/Pokemon";
 import { Card } from "../Card";
 import { useEffect, useState } from "react";
@@ -13,9 +13,8 @@ type Props = {
 
 export const PokemonList: React.FC<Props> = ({ list }) => {
   const [currentItems, setCurrentItems] = useState<Pokemon[] | []>([]);
-  const [pageCount, setPageCount] = useState(0);
-  const [itemOffset, setItemOffset] = useState(0);
-
+  const [pageCount, setPageCount] = useState<number>(0);
+  const [itemOffset, setItemOffset] = useState<number>(0);
 
   useEffect(() => {
     if (list) {
@@ -25,21 +24,26 @@ export const PokemonList: React.FC<Props> = ({ list }) => {
     }
   }, [itemOffset, list]);
 
-  const handlePageClick = (event: { selected: number }) => {
-    if (list) {
-      const newOffset = (event.selected * CARDS_PER_PAGE) % list.length;
-      setItemOffset(newOffset);
-      scrollToTop();
-    }
-  };
+  const handlePageClick = useCallback(
+    (event: { selected: number }) => {
+      if (list) {
+        const newOffset = (event.selected * CARDS_PER_PAGE) % list.length;
+        setItemOffset(newOffset);
+        scrollToTop();
+      }
+    },
+    [list]
+  );
 
   const shouldRenderPagination = list && list.length > CARDS_PER_PAGE;
-
   return (
     <>
-      <div className="list_container">
+      <div className="list-container">
         {currentItems.map((pokemon: Pokemon) => (
-          <Card key={pokemon.name} pokemon={pokemon} />
+          <Card
+            key={pokemon.name}
+            pokemon={pokemon}
+          />
         ))}
         <ScrollToTopButton />
       </div>
@@ -56,7 +60,7 @@ export const PokemonList: React.FC<Props> = ({ list }) => {
           containerClassName="flex justify-between"
           pageLinkClassName="pagination-element"
           previousClassName="pagination-element"
-          nextLinkClassName="pagination-element"
+          nextClassName="pagination-element"
           activeLinkClassName="bg-white text-juicy-red"
         />
       )}

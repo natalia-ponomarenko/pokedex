@@ -1,15 +1,6 @@
 import { PokemonTypes } from "../types/PokemonTypes";
 
-const POKEMON_COUNT = 300;
-
-export const BASE_URL = "https://pokeapi.co/api/v2/pokemon/";
-
-export const URL_ALL_POKEMONS = `${BASE_URL}?limit=${POKEMON_COUNT}`;
-
-export const TYPE_URL = "https://pokeapi.co/api/v2/type/";
-
-export const POKEMON_IMAGE_URL =
-  "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/";
+export const POKEMON_COUNT = 300;
 
 export const CARDS_PER_PAGE = 10;
 
@@ -34,15 +25,6 @@ export const POKEMON_TYPES: PokemonTypes = {
   fairy: "#E69EAC",
   unknown: "#A3A3A3",
   shadow: "#9467B5",
-};
-
-export const DROPDOWN_TRANSITION = {
-  enter: "transition ease-out duration-300",
-  enterFrom: "transform opacity-0 scale-95",
-  enterTo: "transform opacity-100 scale-100",
-  leave: "transition ease-in duration-75",
-  leaveFrom: "transform opacity-100 scale-100",
-  leaveTo: "transform opacity-0 scale-95",
 };
 
 export const MODAL_BACKGROUND_TRANSITION = {

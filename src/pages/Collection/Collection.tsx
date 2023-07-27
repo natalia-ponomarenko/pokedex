@@ -13,7 +13,7 @@ export const Collection: React.FC = () => {
       <div className="m-2">
         <Link to="/">
           <NavigationButton
-            className="px-2.5 navigation_button"
+            className="px-2.5 navigation-button"
             iconClassName="fa-house"
             title="Return to the main list"
           />

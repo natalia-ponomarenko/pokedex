@@ -1,8 +1,4 @@
-import React, {
-  useState,
-  createContext,
-  ReactNode,
-} from "react";
+import React, { useState, createContext, ReactNode, useEffect } from "react";
 import { Pokemon } from "../../types/Pokemon";
 
 type Props = {
@@ -23,6 +19,13 @@ export const CollectionContext = createContext<CollectionContextType>({
 
 export const CollectionProvider: React.FC<Props> = ({ children }) => {
   const [collection, setCollection] = useState<Pokemon[]>([]);
+
+  useEffect(() => {
+    const storedCollection = localStorage.getItem("pokemonCollection");
+    if (storedCollection) {
+      setCollection(JSON.parse(storedCollection));
+    }
+  }, []);
 
   return (
     <CollectionContext.Provider value={{ collection, setCollection }}>
